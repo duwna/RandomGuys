@@ -1,6 +1,7 @@
 package com.example.randomguys.ui.main.composable_items
 
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -10,10 +11,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,27 +23,39 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.randomguys.R
 import com.example.randomguys.models.RouletteItem
+import kotlinx.coroutines.launch
 
 @Composable
 fun AnimatedRoulette(
     items: List<RouletteItem>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    rotationDuration: Int = 10,
+    rotationsCount: Int = 5000
 ) {
-    var isAnimating by remember { mutableStateOf(false) }
-
-    val rotation by animateFloatAsState(
-        targetValue = 100f,
-        animationSpec = tween(durationMillis = 300)
-    )
+    val animationScope = rememberCoroutineScope()
+    val animatedRotation = remember { Animatable(0f) }
 
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
+
         CircleRoulette(
             items = items,
             modifier = Modifier
                 .fillMaxSize()
                 .clip(CircleShape)
-                .clickable {
-                    isAnimating = true
+                .clickable(enabled = !animatedRotation.isRunning) {
+                    animationScope.launch {
+                        val targetAngle = (0..360).random()
+
+                        animatedRotation.animateTo(
+                            targetValue = rotationsCount * 360f + targetAngle,
+                            animationSpec = tween(
+                                durationMillis = rotationDuration,
+                                easing = LinearOutSlowInEasing
+                            ),
+                        )
+
+                        animatedRotation.snapTo(targetAngle.toFloat())
+                    }
                 }
         )
 
@@ -54,7 +65,7 @@ fun AnimatedRoulette(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(30.dp)
-                .rotate(rotation)
+                .rotate(animatedRotation.value)
         )
     }
 }
