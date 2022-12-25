@@ -29,8 +29,9 @@ import kotlinx.coroutines.launch
 fun AnimatedRoulette(
     items: List<RouletteItem>,
     modifier: Modifier = Modifier,
-    rotationDuration: Int = 10,
-    rotationsCount: Int = 5000
+    rotationDuration: Int = 5000,
+    rotationsCount: Int = 10,
+    onItemSelected: (RouletteItem?) -> Unit = {}
 ) {
     val animationScope = rememberCoroutineScope()
     val animatedRotation = remember { Animatable(0f) }
@@ -43,8 +44,10 @@ fun AnimatedRoulette(
                 .fillMaxSize()
                 .clip(CircleShape)
                 .clickable(enabled = !animatedRotation.isRunning) {
+                    onItemSelected.invoke(null)
+
                     animationScope.launch {
-                        val targetAngle = (0..360).random()
+                        val targetAngle = (0 until 360).random()
 
                         animatedRotation.animateTo(
                             targetValue = rotationsCount * 360f + targetAngle,
@@ -55,6 +58,7 @@ fun AnimatedRoulette(
                         )
 
                         animatedRotation.snapTo(targetAngle.toFloat())
+                        onItemSelected.invoke(getSelectedItem(items, targetAngle))
                     }
                 }
         )
@@ -68,6 +72,13 @@ fun AnimatedRoulette(
                 .rotate(animatedRotation.value)
         )
     }
+}
+
+private fun getSelectedItem(items: List<RouletteItem>, targetAngle: Int): RouletteItem {
+    val step = 360 / items.size
+    val selectedIndex = targetAngle / step
+
+    return items[selectedIndex]
 }
 
 @Preview(showBackground = true)
