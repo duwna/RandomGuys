@@ -4,6 +4,8 @@ import com.example.randomguys.models.RouletteItem
 
 data class MainViewState(
     val rouletteItems: List<RouletteItem>,
+    val rouletteRotationDuration: Int = 5000,
+    val rouletteRotationsCount: Int = 10,
     val rouletteRotationAngle: Int? = null
 ) {
 

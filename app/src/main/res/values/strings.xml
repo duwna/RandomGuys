@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Random Guys</string>
+    <string name="settings_duration_title">Длительность: %s c.</string>
+    <string name="settings_rotation_title">Обороты: %s</string>
+    <string name="settings_indicator_title">Индикатор</string>
+    <string name="settings_groups_title">Группы</string>
+
 </resources>

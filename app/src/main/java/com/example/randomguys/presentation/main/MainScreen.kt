@@ -47,6 +47,8 @@ fun MainScreen(
             AnimatedRoulette(
                 items = state.rouletteItems,
                 initialAngle = state.rouletteRotationAngle,
+                rotationDuration = state.rouletteRotationDuration,
+                rotationsCount = state.rouletteRotationsCount,
                 onAngleChanged = viewModel::onAngleChanged,
                 modifier = Modifier
                     .fillMaxWidth()
