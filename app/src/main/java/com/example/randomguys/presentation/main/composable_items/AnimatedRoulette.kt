@@ -1,4 +1,4 @@
-package com.example.randomguys.ui.main.composable_items
+package com.example.randomguys.presentation.main.composable_items
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearOutSlowInEasing

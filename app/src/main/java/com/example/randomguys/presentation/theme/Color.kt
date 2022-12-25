@@ -1,4 +1,4 @@
-package com.example.randomguys.ui.theme
+package com.example.randomguys.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

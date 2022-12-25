@@ -7,17 +7,29 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.randomguys.ui.main.MainScreen
-import com.example.randomguys.ui.theme.RandomGuysTheme
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.randomguys.presentation.Screens
+import com.example.randomguys.presentation.main.MainScreen
+import com.example.randomguys.presentation.settings.SettingsScreen
+import com.example.randomguys.presentation.theme.RandomGuysTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             RandomGuysTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    MainScreen()
+
+                    val navController = rememberNavController()
+
+                    NavHost(navController, startDestination = Screens.MAIN.name) {
+                        composable(Screens.MAIN.name) { MainScreen(navController) }
+                        composable(Screens.SETTINGS.name) { SettingsScreen(navController) }
+                    }
                 }
             }
         }

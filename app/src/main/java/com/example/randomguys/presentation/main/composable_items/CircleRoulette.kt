@@ -1,4 +1,4 @@
-package com.example.randomguys.ui.main.composable_items
+package com.example.randomguys.presentation.main.composable_items
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
