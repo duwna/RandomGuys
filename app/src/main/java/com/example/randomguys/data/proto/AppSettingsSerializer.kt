@@ -1,17 +1,17 @@
 package com.example.randomguys.data.proto
 
 import androidx.datastore.core.Serializer
-import com.example.randomguys.AppSettings
+import com.example.randomguys.AppSettingsDto
 import java.io.InputStream
 import java.io.OutputStream
 
-class AppAppSettingsSerializer : Serializer<AppSettings> {
+class AppAppSettingsSerializer : Serializer<AppSettingsDto> {
 
-    override val defaultValue: AppSettings = AppSettings.getDefaultInstance()
+    override val defaultValue: AppSettingsDto = AppSettingsDto.getDefaultInstance()
 
-    override suspend fun readFrom(input: InputStream): AppSettings =
-        AppSettings.parseFrom(input)
+    override suspend fun readFrom(input: InputStream): AppSettingsDto =
+        AppSettingsDto.parseFrom(input)
 
-    override suspend fun writeTo(t: AppSettings, output: OutputStream) =
+    override suspend fun writeTo(t: AppSettingsDto, output: OutputStream) =
         t.writeTo(output)
 }

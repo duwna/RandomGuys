@@ -1,11 +1,12 @@
-package com.example.randomguys.presentation.settings
+package com.example.randomguys.presentation.screens.settings
 
 import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.randomguys.data.SettingsRepository
-import com.example.randomguys.models.RouletteGroup
+import com.example.randomguys.data.repositories.GroupsRepository
+import com.example.randomguys.data.repositories.SettingsRepository
+import com.example.randomguys.domain.models.RouletteGroup
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val repository: SettingsRepository,
+    private val settingsRepository: SettingsRepository,
+    private val groupsRepository: GroupsRepository,
     private val vibrator: Vibrator
 ) : ViewModel() {
 
@@ -35,7 +37,7 @@ class SettingsViewModel @Inject constructor(
 
     fun saveDuration() {
         viewModelScope.launch {
-            repository.saveDuration(state.value.selectedDuration)
+            settingsRepository.saveDuration(state.value.selectedDuration)
         }
     }
 
@@ -47,7 +49,7 @@ class SettingsViewModel @Inject constructor(
 
     fun saveRotationsCount() {
         viewModelScope.launch {
-            repository.saveRotation(state.value.selectedRotation)
+            settingsRepository.saveRotation(state.value.selectedRotation)
         }
     }
 
@@ -59,12 +61,9 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             updateState {
                 copy(
-                    selectedDuration = repository.getDuration(),
-                    selectedRotation = repository.getRotation(),
-                    groups = listOf(
-                        RouletteGroup(id = 0, items = repository.items),
-                        RouletteGroup(id = 1, items = repository.items)
-                    )
+                    selectedDuration = settingsRepository.getDuration(),
+                    selectedRotation = settingsRepository.getRotation(),
+                    groups = groupsRepository.getGroups()
                 )
             }
         }

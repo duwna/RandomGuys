@@ -1,4 +1,4 @@
-package com.example.randomguys.presentation.settings
+package com.example.randomguys.presentation.screens.settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -22,9 +22,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.randomguys.R
-import com.example.randomguys.presentation.settings.composable_items.AnimatedIndicator
-import com.example.randomguys.presentation.settings.composable_items.GroupItem
-import com.example.randomguys.presentation.settings.composable_items.SliderWithText
+import com.example.randomguys.presentation.screens.settings.composable.AnimatedIndicator
+import com.example.randomguys.presentation.screens.settings.composable.GroupItem
+import com.example.randomguys.presentation.screens.settings.composable.SliderWithText
 
 @Composable
 fun SettingsScreen(

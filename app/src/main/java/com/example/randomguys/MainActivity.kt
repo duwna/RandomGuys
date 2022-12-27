@@ -11,8 +11,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.randomguys.presentation.Screens
-import com.example.randomguys.presentation.main.MainScreen
-import com.example.randomguys.presentation.settings.SettingsScreen
+import com.example.randomguys.presentation.screens.main.MainScreen
+import com.example.randomguys.presentation.screens.settings.SettingsScreen
 import com.example.randomguys.presentation.theme.RandomGuysTheme
 import dagger.hilt.android.AndroidEntryPoint
 

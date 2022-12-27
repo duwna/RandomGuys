@@ -1,4 +1,4 @@
-package com.example.randomguys.presentation.settings.composable_items
+package com.example.randomguys.presentation.screens.settings.composable
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Slider

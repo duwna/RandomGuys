@@ -1,6 +1,6 @@
-package com.example.randomguys.presentation.main
+package com.example.randomguys.presentation.screens.main
 
-import com.example.randomguys.models.RouletteItem
+import com.example.randomguys.domain.models.RouletteItem
 
 data class MainViewState(
     val rouletteItems: List<RouletteItem>,

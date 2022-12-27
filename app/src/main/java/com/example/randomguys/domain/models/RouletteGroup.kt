@@ -1,4 +1,4 @@
-package com.example.randomguys.models
+package com.example.randomguys.domain.models
 
 data class RouletteGroup(
     val id: Int,

@@ -1,4 +1,4 @@
-package com.example.randomguys.presentation.main.composable_items
+package com.example.randomguys.presentation.screens.main.composable
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.randomguys.models.RouletteItem
+import com.example.randomguys.domain.models.RouletteItem
 
 @Composable
 fun CircleRoulette(

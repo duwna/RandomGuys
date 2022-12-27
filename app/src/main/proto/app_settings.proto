@@ -3,7 +3,7 @@ syntax = "proto3";
 option java_package = "com.example.randomguys";
 option java_multiple_files = true;
 
-message AppSettings {
+message AppSettingsDto {
   uint32 rotation_duration = 1;
   uint32 rotations_count = 2;
 }

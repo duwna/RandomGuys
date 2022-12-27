@@ -1,4 +1,4 @@
-package com.example.randomguys.models
+package com.example.randomguys.domain.models
 
 import androidx.compose.ui.graphics.Color
 

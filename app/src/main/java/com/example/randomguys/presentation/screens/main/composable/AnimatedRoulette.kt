@@ -1,4 +1,4 @@
-package com.example.randomguys.presentation.main.composable_items
+package com.example.randomguys.presentation.screens.main.composable
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -22,7 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.randomguys.R
-import com.example.randomguys.models.RouletteItem
+import com.example.randomguys.domain.models.RouletteItem
 import kotlinx.coroutines.launch
 
 @Composable

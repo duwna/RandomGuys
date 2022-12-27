@@ -1,4 +1,4 @@
-package com.example.randomguys.presentation.main.composable_items
+package com.example.randomguys.presentation.screens.main.composable
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset

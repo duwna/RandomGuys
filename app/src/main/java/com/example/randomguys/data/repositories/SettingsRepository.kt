@@ -1,11 +1,11 @@
-package com.example.randomguys.data
+package com.example.randomguys.data.repositories
 
-import androidx.compose.ui.graphics.Color
-import com.example.randomguys.AppSettings
-import com.example.randomguys.models.RouletteItem
+import com.example.randomguys.data.PersistentStorage
+import com.example.randomguys.domain.models.Settings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,13 +14,9 @@ import javax.inject.Singleton
 class SettingsRepository @Inject constructor(
     private val persistentStorage: PersistentStorage
 ) {
-    val items = listOf(
-        RouletteItem("DD", Color.Green),
-        RouletteItem("EEEEE", Color.Blue),
-        RouletteItem("DD", Color.Red)
-    )
 
-    fun observeSettings(): Flow<AppSettings> = persistentStorage.observeSettings()
+    fun observeSettings(): Flow<Settings> = persistentStorage.observeSettings()
+        .map(Settings.Companion::fromDto)
 
     suspend fun getDuration() = observeSettings().first().rotationDuration / 100f
 

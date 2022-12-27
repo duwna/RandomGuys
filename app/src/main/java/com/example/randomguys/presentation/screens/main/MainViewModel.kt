@@ -1,8 +1,8 @@
-package com.example.randomguys.presentation.main
+package com.example.randomguys.presentation.screens.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.randomguys.data.SettingsRepository
+import com.example.randomguys.data.repositories.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,7 +15,7 @@ class MainViewModel @Inject constructor(
     private val repository: SettingsRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(MainViewState(repository.items))
+    private val _state = MutableStateFlow(MainViewState(emptyList()))
     val state = _state.asStateFlow()
 
     init {

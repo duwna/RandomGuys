@@ -1,4 +1,4 @@
-package com.example.randomguys.presentation.main
+package com.example.randomguys.presentation.screens.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement.Center
@@ -27,7 +27,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.randomguys.R
 import com.example.randomguys.presentation.Screens
-import com.example.randomguys.presentation.main.composable_items.AnimatedRoulette
+import com.example.randomguys.presentation.screens.main.composable.AnimatedRoulette
 
 @Composable
 fun MainScreen(

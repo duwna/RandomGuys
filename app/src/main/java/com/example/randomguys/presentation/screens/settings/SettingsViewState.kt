@@ -1,6 +1,6 @@
-package com.example.randomguys.presentation.settings
+package com.example.randomguys.presentation.screens.settings
 
-import com.example.randomguys.models.RouletteGroup
+import com.example.randomguys.domain.models.RouletteGroup
 
 data class SettingsViewState(
     val selectedDuration: Float = 0f,
