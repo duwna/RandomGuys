@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
 
                     val navController = rememberNavController()
 
-                    NavHost(navController, startDestination = Screens.MAIN.name) {
+                    NavHost(navController, startDestination = Screens.SETTINGS.name) {
                         composable(Screens.MAIN.name) { MainScreen(navController) }
                         composable(Screens.SETTINGS.name) { SettingsScreen(navController) }
                     }

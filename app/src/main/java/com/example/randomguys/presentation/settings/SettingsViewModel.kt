@@ -1,5 +1,7 @@
 package com.example.randomguys.presentation.settings
 
+import android.os.VibrationEffect
+import android.os.Vibrator
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.randomguys.data.SettingsRepository
@@ -12,18 +14,23 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val repository: SettingsRepository
+    private val repository: SettingsRepository,
+    private val vibrator: Vibrator
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SettingsViewState())
     val state = _state.asStateFlow()
+
+    private val sliderVibrationEffect = VibrationEffect.createOneShot(1, 50)
 
     init {
         setInitialData()
     }
 
     fun onDurationChanged(duration: Float) {
+        val oldDuration = state.value.selectedDuration
         updateState { copy(selectedDuration = duration) }
+        vibrateIfValueChanged(oldDuration, duration)
     }
 
     fun saveDuration() {
@@ -32,8 +39,10 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun onRotationsCountChanged(duration: Float) {
-        updateState { copy(selectedRotation = duration) }
+    fun onRotationsCountChanged(rotation: Float) {
+        val oldRotation = state.value.selectedRotation
+        updateState { copy(selectedRotation = rotation) }
+        vibrateIfValueChanged(oldRotation, rotation)
     }
 
     fun saveRotationsCount() {
@@ -58,6 +67,12 @@ class SettingsViewModel @Inject constructor(
                     )
                 )
             }
+        }
+    }
+
+    private fun vibrateIfValueChanged(oldValue: Float, newValue: Float) {
+        if ((oldValue * 100).toInt() != (newValue * 100).toInt()) {
+            vibrator.vibrate(sliderVibrationEffect)
         }
     }
 

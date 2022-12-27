@@ -28,13 +28,15 @@ class MainViewModel @Inject constructor(
 
     private fun observeSettingsChanges() {
         repository
-            .observeDuration()
-            .onEach { updateState { copy(rouletteRotationDuration = it) } }
-            .launchIn(viewModelScope)
-
-        repository
-            .observeRotation()
-            .onEach { updateState { copy(rouletteRotationsCount = it) } }
+            .observeSettings()
+            .onEach {
+                updateState {
+                    copy(
+                        rouletteRotationDuration = it.rotationDuration,
+                        rouletteRotationsCount = it.rotationsCount
+                    )
+                }
+            }
             .launchIn(viewModelScope)
     }
 
