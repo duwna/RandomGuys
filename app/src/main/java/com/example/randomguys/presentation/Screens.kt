@@ -1,5 +1,5 @@
 package com.example.randomguys.presentation
 
 enum class Screens {
-    MAIN, SETTINGS
+    MAIN, SETTINGS, GROUP
 }

@@ -22,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.randomguys.R
+import com.example.randomguys.presentation.Screens
 import com.example.randomguys.presentation.screens.settings.composable.AnimatedIndicator
 import com.example.randomguys.presentation.screens.settings.composable.GroupItem
 import com.example.randomguys.presentation.screens.settings.composable.SliderWithText
@@ -74,6 +75,7 @@ fun SettingsScreen(
             GroupItem(
                 group = group,
                 isSelected = group.id == state.selectedGroupId,
+                onGroupClicked = { navController.navigate(Screens.GROUP.name) },
                 modifier = Modifier
                     .padding(20.dp)
                     .clip(RoundedCornerShape(12.dp))
