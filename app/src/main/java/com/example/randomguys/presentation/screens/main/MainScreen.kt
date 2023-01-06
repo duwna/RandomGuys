@@ -26,7 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.randomguys.R
-import com.example.randomguys.presentation.Screens
+import com.example.randomguys.presentation.Screen
 import com.example.randomguys.presentation.screens.main.composable.AnimatedRoulette
 
 @Composable
@@ -68,7 +68,7 @@ fun MainScreen(
         }
 
         FloatingActionButton(
-            onClick = { navController.navigate(Screens.SETTINGS.name) },
+            onClick = { navController.navigate(Screen.SETTINGS.route) },
             modifier = Modifier
                 .align(BottomEnd)
                 .padding(30.dp)

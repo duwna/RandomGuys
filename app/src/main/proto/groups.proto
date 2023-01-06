@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_package = "com.example.randomguys";
+option java_multiple_files = true;
+
+message GroupMemberDto {
+  string name = 1;
+  uint64 color = 2;
+}
+
+message GroupDto {
+  uint32 id = 1;
+  repeated GroupMemberDto members = 2;
+}
+
+message AllGroupsDto {
+  repeated GroupDto groups = 1;
+}

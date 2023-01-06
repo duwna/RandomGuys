@@ -5,6 +5,8 @@ import com.example.randomguys.data.PersistentStorage
 import com.example.randomguys.domain.models.RouletteGroup
 import com.example.randomguys.domain.models.RouletteItem
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -18,6 +20,11 @@ class GroupsRepository @Inject constructor(
         RouletteItem("EEEEE", Color.Blue),
         RouletteItem("DD", Color.Red)
     )
+
+    fun observeGroups(): Flow<List<RouletteGroup>> =
+        persistentStorage.observeGroups().map {
+            it.groupsList.map(RouletteGroup.Companion::fromDto)
+        }
 
     suspend fun getGroup(id: Int): RouletteGroup? {
         return getGroups().first { it.id == id }

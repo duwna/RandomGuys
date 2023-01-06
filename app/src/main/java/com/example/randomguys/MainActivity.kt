@@ -10,7 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.randomguys.presentation.Screens
+import com.example.randomguys.presentation.Screen
+import com.example.randomguys.presentation.screens.group_edition.GroupEditionNavArgs
 import com.example.randomguys.presentation.screens.group_edition.GroupScreen
 import com.example.randomguys.presentation.screens.main.MainScreen
 import com.example.randomguys.presentation.screens.settings.SettingsScreen
@@ -27,10 +28,16 @@ class MainActivity : ComponentActivity() {
 
                     val navController = rememberNavController()
 
-                    NavHost(navController, startDestination = Screens.SETTINGS.name) {
-                        composable(Screens.MAIN.name) { MainScreen(navController) }
-                        composable(Screens.SETTINGS.name) { SettingsScreen(navController) }
-                        composable(Screens.GROUP.name) { GroupScreen(navController) }
+                    NavHost(navController, startDestination = Screen.SETTINGS.route) {
+                        composable(Screen.MAIN.route) {
+                            MainScreen(navController)
+                        }
+                        composable(Screen.SETTINGS.route) {
+                            SettingsScreen(navController)
+                        }
+                        composable(Screen.GROUP.route, GroupEditionNavArgs.getNamedNavArgs()) {
+                            GroupScreen(navController)
+                        }
                     }
                 }
             }

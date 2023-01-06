@@ -5,7 +5,7 @@ import com.example.randomguys.AppSettingsDto
 import java.io.InputStream
 import java.io.OutputStream
 
-class AppAppSettingsSerializer : Serializer<AppSettingsDto> {
+class AppSettingsSerializer : Serializer<AppSettingsDto> {
 
     override val defaultValue: AppSettingsDto = AppSettingsDto.getDefaultInstance()
 

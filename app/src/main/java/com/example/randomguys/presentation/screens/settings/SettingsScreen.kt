@@ -7,10 +7,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,7 +24,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.randomguys.R
-import com.example.randomguys.presentation.Screens
+import com.example.randomguys.presentation.Screen
+import com.example.randomguys.presentation.screens.group_edition.GroupEditionNavArgs
 import com.example.randomguys.presentation.screens.settings.composable.AnimatedIndicator
 import com.example.randomguys.presentation.screens.settings.composable.GroupItem
 import com.example.randomguys.presentation.screens.settings.composable.SliderWithText
@@ -72,15 +75,23 @@ fun SettingsScreen(
         )
 
         state.groups.forEach { group ->
-            GroupItem(
-                group = group,
-                isSelected = group.id == state.selectedGroupId,
-                onGroupClicked = { navController.navigate(Screens.GROUP.name) },
-                modifier = Modifier
-                    .padding(20.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .clickable { viewModel.onGroupSelected(group.id) }
-            )
+            key(group.id) {
+                GroupItem(
+                    group = group,
+                    isSelected = group.id == state.selectedGroupId,
+                    onGroupClicked = { navController.navigate(Screen.GROUP.withArgs(GroupEditionNavArgs(group.id))) },
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable { viewModel.onGroupSelected(group.id) }
+                )
+            }
+        }
+
+        Button(onClick = {
+            navController.navigate(Screen.GROUP.route)
+        }) {
+            Text(text = "new group")
         }
     }
 }
