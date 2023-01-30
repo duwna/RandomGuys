@@ -1,11 +1,11 @@
 package com.example.randomguys.data.repositories
 
-import androidx.compose.ui.graphics.Color
+import com.example.randomguys.GroupDto
+import com.example.randomguys.GroupMemberDto
 import com.example.randomguys.data.PersistentStorage
 import com.example.randomguys.domain.models.RouletteGroup
-import com.example.randomguys.domain.models.RouletteItem
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,27 +15,34 @@ class GroupsRepository @Inject constructor(
     private val persistentStorage: PersistentStorage
 ) {
 
-    private val items = listOf(
-        RouletteItem("DD", Color.Green),
-        RouletteItem("EEEEE", Color.Blue),
-        RouletteItem("DD", Color.Red)
-    )
-
     fun observeGroups(): Flow<List<RouletteGroup>> =
         persistentStorage.observeGroups().map {
             it.groupsList.map(RouletteGroup.Companion::fromDto)
         }
 
-    suspend fun getGroup(id: Int): RouletteGroup? {
-        return getGroups().first { it.id == id }
-    }
+    suspend fun getGroup(id: String): RouletteGroup = observeGroups()
+        .map { it.first { group -> group.id == id } }
+        .first()
 
-    suspend fun getGroups(): List<RouletteGroup> {
-        delay(200)
+    suspend fun saveGroup(group: RouletteGroup) {
+        val index = observeGroups()
+            .map { it.indexOfFirst { groupDto -> groupDto.id == group.id } }
+            .first()
 
-        return listOf(
-            RouletteGroup(0, items),
-            RouletteGroup(1, items)
-        )
+        val membersDto = group.items.map {
+            GroupMemberDto.newBuilder()
+                .setName(it.name)
+                .setColor(it.color.value.toLong())
+                .build()
+        }
+
+        val groupDto = GroupDto.newBuilder()
+            .setId(group.id)
+            .addAllMembers(membersDto)
+            .build()
+
+        persistentStorage.saveGroups {
+            if (index >= 0) setGroups(index, groupDto) else addGroups(groupDto)
+        }
     }
 }

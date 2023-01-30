@@ -9,7 +9,7 @@ message GroupMemberDto {
 }
 
 message GroupDto {
-  uint32 id = 1;
+  string id = 1;
   repeated GroupMemberDto members = 2;
 }
 

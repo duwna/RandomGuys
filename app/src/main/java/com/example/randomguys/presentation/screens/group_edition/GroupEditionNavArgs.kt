@@ -6,11 +6,11 @@ import androidx.navigation.navArgument
 import com.example.randomguys.presentation.screens.group_edition.GroupEditionNavArgs.ArgKeys.ARG_GROUP_ID
 
 data class GroupEditionNavArgs(
-    val groupId: Int? = null
+    val groupId: String? = null
 ) {
 
     constructor(savedStateHandle: SavedStateHandle) : this(
-        groupId = savedStateHandle.get<String?>(ARG_GROUP_ID)?.toInt()
+        groupId = savedStateHandle[ARG_GROUP_ID]
     )
 
     fun createLink(route: String): String = route
@@ -21,7 +21,7 @@ data class GroupEditionNavArgs(
 
         fun getNamedNavArgs() = listOf(
             navArgument(ARG_GROUP_ID) {
-                type = NavType.StringType // IntType does not support nullable
+                type = NavType.StringType
                 nullable = true
             }
         )

@@ -6,10 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.randomguys.data.repositories.GroupsRepository
 import com.example.randomguys.data.repositories.SettingsRepository
-import com.example.randomguys.domain.models.RouletteGroup
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,6 +29,7 @@ class SettingsViewModel @Inject constructor(
 
     init {
         setInitialData()
+        observeGroupsChanges()
     }
 
     fun onDurationChanged(duration: Float) {
@@ -53,7 +56,7 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun onGroupSelected(id: Int) {
+    fun onGroupSelected(id: String) {
         updateState { copy(selectedGroupId = id) }
     }
 
@@ -63,10 +66,17 @@ class SettingsViewModel @Inject constructor(
                 copy(
                     selectedDuration = settingsRepository.getDuration(),
                     selectedRotation = settingsRepository.getRotation(),
-                    groups = groupsRepository.getGroups()
+                    groups = groupsRepository.observeGroups().first()
                 )
             }
         }
+    }
+
+    private fun observeGroupsChanges() {
+        groupsRepository
+            .observeGroups()
+            .onEach { updateState { copy(groups = it) } }
+            .launchIn(viewModelScope)
     }
 
     private fun vibrateIfValueChanged(oldValue: Float, newValue: Float) {

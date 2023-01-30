@@ -64,7 +64,7 @@ fun GroupItem(
 private fun GroupItemPreview() {
     GroupItem(
         group = RouletteGroup(
-            id = 0,
+            id = "1",
             items = listOf(
                 RouletteItem("AAAA", Color.Blue),
                 RouletteItem("ddd", Color.Red),

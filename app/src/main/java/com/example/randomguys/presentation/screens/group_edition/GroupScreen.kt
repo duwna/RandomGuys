@@ -1,6 +1,9 @@
 package com.example.randomguys.presentation.screens.group_edition
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -18,11 +21,18 @@ fun GroupScreen(
 
     val state by viewModel.state.collectAsState()
 
-    state.group.items.forEachIndexed { index, item ->
-        MemberInput(
-            member = item,
-            modifier = Modifier.fillMaxWidth(),
-            onTextChanged = { text -> viewModel.onTextChanged(index, text) }
-        )
+    Column {
+        state.group?.items?.forEachIndexed { index, item ->
+            MemberInput(
+                member = item,
+                modifier = Modifier.fillMaxWidth(),
+                onTextChanged = { text -> viewModel.onTextChanged(index, text) },
+                onRemoveClicked = { viewModel.removeMember(index) }
+            )
+        }
+
+        Button(onClick = viewModel::addMember) {
+            Text(text = "add")
+        }
     }
 }
