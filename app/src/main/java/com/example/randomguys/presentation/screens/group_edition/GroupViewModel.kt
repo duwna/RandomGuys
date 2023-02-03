@@ -4,6 +4,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.randomguys.R
+import com.example.randomguys.data.MessageEvent
+import com.example.randomguys.data.MessageHandler
+import com.example.randomguys.data.launchHandlingErrors
 import com.example.randomguys.data.repositories.GroupsRepository
 import com.example.randomguys.domain.models.RouletteGroup
 import com.example.randomguys.domain.models.RouletteItem
@@ -17,12 +21,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class GroupViewModel @Inject constructor(
     private val repository: GroupsRepository,
+    private val errorHandler: MessageHandler,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -40,8 +44,14 @@ class GroupViewModel @Inject constructor(
         this[itemIndex] = this[itemIndex].copy(name = text)
     }
 
-    fun removeMember(index: Int) = updateMembersList {
-        removeAt(index)
+    fun removeMember(index: Int) {
+        if (!state.value.group?.items.isNullOrEmpty()) {
+            errorHandler.showError(MessageEvent.Id(R.string.no_members_in_group_message))
+        }
+
+        updateMembersList {
+            removeAt(index)
+        }
     }
 
     fun addMember() = updateMembersList {
@@ -54,7 +64,7 @@ class GroupViewModel @Inject constructor(
     }
 
     private fun loadGroup(groupId: String) {
-        viewModelScope.launch {
+        viewModelScope.launchHandlingErrors(errorHandler) {
             _state.update { it.copy(group = repository.getGroup(groupId)) }
         }
     }

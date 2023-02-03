@@ -4,5 +4,6 @@
     <string name="settings_rotation_title">Обороты: %s</string>
     <string name="settings_indicator_title">Индикатор</string>
     <string name="settings_groups_title">Группы</string>
+    <string name="no_members_in_group_message">Группа удалена</string>
 
 </resources>

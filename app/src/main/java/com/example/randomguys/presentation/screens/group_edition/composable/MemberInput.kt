@@ -25,13 +25,11 @@ fun MemberInput(
             value = member.name,
             onValueChange = onTextChanged,
             trailingIcon = {
-                if (member.name.isNotEmpty()) {
-                    Image(
-                        painter = painterResource(R.drawable.icon_remove),
-                        contentDescription = "remove member",
-                        modifier = Modifier.clickable(onClick = onRemoveClicked)
-                    )
-                }
+                Image(
+                    painter = painterResource(R.drawable.icon_remove),
+                    contentDescription = "remove member",
+                    modifier = Modifier.clickable(onClick = onRemoveClicked)
+                )
             }
         )
 
