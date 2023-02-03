@@ -52,9 +52,10 @@ fun CoroutineScope.launchHandlingErrors(
     coroutineContext: CoroutineContext = EmptyCoroutineContext,
     block: suspend CoroutineScope.() -> Unit
 ) {
-    val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        errorHandler.showError(MessageEvent.Error(throwable))
-    }
-
+    val exceptionHandler = messageHandler(errorHandler)
     launch(context = coroutineContext + exceptionHandler, block = block)
+}
+
+fun messageHandler(messageHandler: MessageHandler) = CoroutineExceptionHandler { _, throwable ->
+    messageHandler.showError(MessageEvent.Error(throwable))
 }

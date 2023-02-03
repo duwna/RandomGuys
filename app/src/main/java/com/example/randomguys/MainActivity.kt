@@ -33,8 +33,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             RandomGuysTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    SnackbarScaffold(messageHandler)
-                    MainNavHost(navController = rememberNavController())
+                    SnackbarScaffold(messageHandler) {
+                        MainNavHost(navController = rememberNavController())
+                    }
                 }
             }
         }

@@ -29,7 +29,7 @@ class GroupsRepository @Inject constructor(
             .map { it.indexOfFirst { groupDto -> groupDto.id == group.id } }
             .first()
 
-        val membersDto = group.items.map {
+        val membersDtoList = group.items.map {
             GroupMemberDto.newBuilder()
                 .setName(it.name)
                 .setColor(it.color.value.toLong())
@@ -38,11 +38,15 @@ class GroupsRepository @Inject constructor(
 
         val groupDto = GroupDto.newBuilder()
             .setId(group.id)
-            .addAllMembers(membersDto)
+            .addAllMembers(membersDtoList)
             .build()
 
         persistentStorage.saveGroups {
-            if (index >= 0) setGroups(index, groupDto) else addGroups(groupDto)
+            when {
+                membersDtoList.isEmpty() -> removeGroups(index)
+                index < 0 -> addGroups(groupDto)
+                else -> setGroups(index, groupDto)
+            }
         }
     }
 }

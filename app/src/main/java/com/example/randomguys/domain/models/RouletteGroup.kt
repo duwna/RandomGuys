@@ -1,5 +1,6 @@
 package com.example.randomguys.domain.models
 
+import androidx.compose.ui.graphics.Color
 import com.example.randomguys.GroupDto
 import java.util.UUID
 
@@ -17,7 +18,12 @@ data class RouletteGroup(
 
         fun create() = RouletteGroup(
             id = UUID.randomUUID().toString(),
-            items = emptyList()
+            items = listOf(
+                RouletteItem(
+                    name = "",
+                    color = Color.Black
+                )
+            )
         )
     }
 }

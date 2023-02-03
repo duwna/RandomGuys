@@ -3,6 +3,7 @@ package com.example.randomguys.presentation.screens.settings
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -88,10 +89,11 @@ fun SettingsScreen(
             }
         }
 
-        Button(onClick = {
-            navController.navigate(Screen.GROUP.route)
-        }) {
-            Text(text = "new group")
+        Button(
+            modifier = Modifier.fillMaxWidth().padding(20.dp),
+            onClick = { navController.navigate(Screen.GROUP.route) })
+        {
+            Text(text = stringResource(R.string.add_group_button))
         }
     }
 }
