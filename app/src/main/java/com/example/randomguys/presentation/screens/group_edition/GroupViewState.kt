@@ -6,7 +6,3 @@ data class GroupViewState(
     val group: RouletteGroup? = null,
     val isColorPickerVisibleForIndex: Int? = null
 )
-
-sealed class GroupEvent {
-    object NavigateUp : GroupEvent()
-}

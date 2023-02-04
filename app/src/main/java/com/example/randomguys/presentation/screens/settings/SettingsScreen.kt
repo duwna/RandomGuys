@@ -22,21 +22,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.randomguys.R
-import com.example.randomguys.presentation.Screen
-import com.example.randomguys.presentation.screens.group_edition.GroupEditionNavArgs
-import com.example.randomguys.presentation.screens.group_edition.color_picker.ColorPickerDialog
 import com.example.randomguys.presentation.screens.settings.composable.AnimatedIndicator
 import com.example.randomguys.presentation.screens.settings.composable.GroupItem
 import com.example.randomguys.presentation.screens.settings.composable.SliderWithText
 
 @Composable
-fun SettingsScreen(
-    navController: NavController = rememberNavController(),
-    viewModel: SettingsViewModel = hiltViewModel()
-) {
+fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
 
     val state by viewModel.state.collectAsState()
 
@@ -81,7 +73,7 @@ fun SettingsScreen(
                 GroupItem(
                     group = group,
                     isSelected = group.id == state.selectedGroupId,
-                    onGroupClicked = { navController.navigate(Screen.GROUP.withArgs(GroupEditionNavArgs(group.id))) },
+                    onGroupClicked = { viewModel.navigateToGroup(group.id) },
                     modifier = Modifier
                         .padding(20.dp)
                         .clip(RoundedCornerShape(12.dp))
@@ -94,7 +86,8 @@ fun SettingsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp),
-            onClick = { navController.navigate(Screen.GROUP.route) })
+            onClick = viewModel::navigateToGroup
+        )
         {
             Text(text = stringResource(R.string.add_group_button))
         }

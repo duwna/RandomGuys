@@ -17,28 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.randomguys.R
 import com.example.randomguys.presentation.screens.group_edition.color_picker.ColorPickerDialog
 import com.example.randomguys.presentation.screens.group_edition.composable.MemberInput
-import com.example.randomguys.presentation.utils.collectAsEffect
 
 @Composable
-fun GroupScreen(
-    navController: NavController = rememberNavController(),
-    viewModel: GroupViewModel = hiltViewModel()
-) {
+fun GroupScreen(viewModel: GroupViewModel = hiltViewModel()) {
 
     val state by viewModel.state.collectAsState()
-
-    viewModel.events.collectAsEffect { event ->
-        when (event) {
-            is GroupEvent.NavigateUp -> {
-                navController.navigateUp()
-            }
-        }
-    }
 
     Column(
         modifier = Modifier

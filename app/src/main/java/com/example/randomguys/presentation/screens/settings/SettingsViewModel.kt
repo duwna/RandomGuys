@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.randomguys.data.repositories.GroupsRepository
 import com.example.randomguys.data.repositories.SettingsRepository
+import com.example.randomguys.navigation.Navigator
+import com.example.randomguys.presentation.Screen
+import com.example.randomguys.presentation.screens.group_edition.GroupEditionNavArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +22,8 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val groupsRepository: GroupsRepository,
-    private val vibrator: Vibrator
+    private val vibrator: Vibrator,
+    private val navigator: Navigator
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SettingsViewState())
@@ -58,6 +62,14 @@ class SettingsViewModel @Inject constructor(
 
     fun onGroupSelected(id: String) {
         updateState { copy(selectedGroupId = id) }
+    }
+
+    fun navigateToGroup(id: String? = null) {
+        if (id != null) {
+            navigator.navigate(Screen.GROUP.withArgs(GroupEditionNavArgs(id)))
+        } else {
+            navigator.navigate(Screen.GROUP.route)
+        }
     }
 
     private fun setInitialData() {

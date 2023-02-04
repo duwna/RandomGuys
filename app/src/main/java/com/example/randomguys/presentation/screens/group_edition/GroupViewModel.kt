@@ -12,11 +12,10 @@ import com.example.randomguys.data.messageHandler
 import com.example.randomguys.data.repositories.GroupsRepository
 import com.example.randomguys.domain.models.RouletteGroup
 import com.example.randomguys.domain.models.RouletteItem
-import com.example.randomguys.presentation.utils.mutableEventFlow
+import com.example.randomguys.navigation.Navigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -32,6 +31,7 @@ import javax.inject.Inject
 class GroupViewModel @Inject constructor(
     private val repository: GroupsRepository,
     private val errorHandler: MessageHandler,
+    private val navigator: Navigator,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -39,9 +39,6 @@ class GroupViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(GroupViewState())
     val state = _state.asStateFlow()
-
-    private val _events = mutableEventFlow<GroupEvent>()
-    val events = _events.asSharedFlow()
 
     init {
         if (args.groupId != null) loadGroup(args.groupId) else createGroup()
@@ -61,7 +58,7 @@ class GroupViewModel @Inject constructor(
             errorHandler.showError(MessageEvent.Id(R.string.no_members_in_group_message))
             viewModelScope.launch {
                 delay(500)
-                _events.emit(GroupEvent.NavigateUp)
+                navigator.popBackStack()
             }
         }
     }

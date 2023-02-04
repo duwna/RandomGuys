@@ -5,6 +5,8 @@ import android.os.Vibrator
 import androidx.core.content.getSystemService
 import com.example.randomguys.data.MessageHandler
 import com.example.randomguys.data.PersistentStorage
+import com.example.randomguys.navigation.Navigator
+import com.example.randomguys.navigation.NavigatorImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,6 +19,7 @@ import javax.inject.Singleton
 object AppModule {
 
     @Provides
+    @Singleton
     fun providePersistentStorage(@ApplicationContext context: Context) =
         PersistentStorage(context)
 
@@ -27,4 +30,8 @@ object AppModule {
     @Provides
     @Singleton
     fun provideMessageHandler() = MessageHandler()
+
+    @Provides
+    @Singleton
+    fun provideNavigator(): Navigator = NavigatorImpl()
 }

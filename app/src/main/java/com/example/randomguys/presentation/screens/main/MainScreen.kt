@@ -23,17 +23,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.randomguys.R
-import com.example.randomguys.presentation.Screen
 import com.example.randomguys.presentation.screens.main.composable.AnimatedRoulette
 
 @Composable
-fun MainScreen(
-    navController: NavController = rememberNavController(),
-    viewModel: MainViewModel = hiltViewModel()
-) {
+fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -68,7 +62,7 @@ fun MainScreen(
         }
 
         FloatingActionButton(
-            onClick = { navController.navigate(Screen.SETTINGS.route) },
+            onClick = viewModel::navigateToSettings,
             modifier = Modifier
                 .align(BottomEnd)
                 .padding(30.dp)

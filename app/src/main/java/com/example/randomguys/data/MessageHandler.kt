@@ -8,6 +8,7 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -22,6 +23,10 @@ class MessageHandler {
 
     fun showError(errorEvent: MessageEvent) {
         messageFlow.tryEmit(errorEvent)
+
+        if (errorEvent is MessageEvent.Error) {
+            Timber.tag("MessageHandler").e(errorEvent.throwable)
+        }
     }
 
 }
