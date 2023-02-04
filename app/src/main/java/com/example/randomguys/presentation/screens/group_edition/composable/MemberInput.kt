@@ -14,6 +14,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,7 +28,8 @@ fun MemberInput(
     member: RouletteItem,
     modifier: Modifier,
     onTextChanged: (String) -> Unit,
-    onRemoveClicked: () -> Unit
+    onRemoveClicked: () -> Unit,
+    onColorClicked: () -> Unit
 ) {
     Row(modifier) {
         TextField(
@@ -39,7 +41,7 @@ fun MemberInput(
                     painter = painterResource(R.drawable.icon_remove),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                     contentDescription = "remove member",
-                    modifier = Modifier.clickable(onClick = onRemoveClicked)
+                    modifier = Modifier.clickable(onClick = onRemoveClicked).clip(CircleShape)
                 )
             }
         )
@@ -51,6 +53,7 @@ fun MemberInput(
                 .background(color = member.color, shape = CircleShape)
                 .align(CenterVertically)
                 .size(40.dp)
+                .clickable(onClick = onColorClicked)
         )
     }
 }

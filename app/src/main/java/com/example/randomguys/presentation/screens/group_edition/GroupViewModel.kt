@@ -37,7 +37,7 @@ class GroupViewModel @Inject constructor(
 
     private val args = GroupEditionNavArgs(savedStateHandle)
 
-    private val _state = MutableStateFlow(GroupViewState(group = null))
+    private val _state = MutableStateFlow(GroupViewState())
     val state = _state.asStateFlow()
 
     private val _events = mutableEventFlow<GroupEvent>()
@@ -68,6 +68,20 @@ class GroupViewModel @Inject constructor(
 
     fun addMember() = updateMembersList {
         add(RouletteItem(name = "", color = Color.Black))
+    }
+
+    fun showColorPicker(index: Int) {
+        _state.update { it.copy(isColorPickerVisibleForIndex = index) }
+    }
+
+    fun onColorUpdated(color: Color?) {
+        val index = state.value.isColorPickerVisibleForIndex
+
+        _state.update { it.copy(isColorPickerVisibleForIndex = null) }
+
+        if (index != null && color != null) {
+            updateMembersList { this[index] = this[index].copy(color = color) }
+        }
     }
 
     private fun updateMembersList(updateAction: MutableList<RouletteItem>.() -> Unit) = _state.update {

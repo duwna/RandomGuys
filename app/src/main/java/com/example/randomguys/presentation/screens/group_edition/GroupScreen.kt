@@ -20,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.randomguys.R
+import com.example.randomguys.presentation.screens.group_edition.color_picker.ColorPickerDialog
 import com.example.randomguys.presentation.screens.group_edition.composable.MemberInput
 import com.example.randomguys.presentation.utils.collectAsEffect
 
@@ -53,7 +54,8 @@ fun GroupScreen(
                     member = item,
                     modifier = Modifier.fillMaxWidth(),
                     onTextChanged = { text -> viewModel.onTextChanged(index, text) },
-                    onRemoveClicked = { viewModel.removeMember(index) }
+                    onRemoveClicked = { viewModel.removeMember(index) },
+                    onColorClicked = { viewModel.showColorPicker(index) }
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
@@ -65,6 +67,10 @@ fun GroupScreen(
                 onClick = viewModel::addMember
             ) {
                 Text(text = stringResource(R.string.add_group_button))
+            }
+
+            if (state.isColorPickerVisibleForIndex != null) {
+                ColorPickerDialog(onDismiss = viewModel::onColorUpdated)
             }
         }
     }

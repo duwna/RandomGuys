@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.randomguys.R
 import com.example.randomguys.presentation.Screen
 import com.example.randomguys.presentation.screens.group_edition.GroupEditionNavArgs
+import com.example.randomguys.presentation.screens.group_edition.color_picker.ColorPickerDialog
 import com.example.randomguys.presentation.screens.settings.composable.AnimatedIndicator
 import com.example.randomguys.presentation.screens.settings.composable.GroupItem
 import com.example.randomguys.presentation.screens.settings.composable.SliderWithText
@@ -90,7 +91,9 @@ fun SettingsScreen(
         }
 
         Button(
-            modifier = Modifier.fillMaxWidth().padding(20.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
             onClick = { navController.navigate(Screen.GROUP.route) })
         {
             Text(text = stringResource(R.string.add_group_button))
