@@ -41,7 +41,9 @@ fun MemberInput(
                     painter = painterResource(R.drawable.icon_remove),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                     contentDescription = "remove member",
-                    modifier = Modifier.clickable(onClick = onRemoveClicked).clip(CircleShape)
+                    modifier = Modifier
+                        .clickable(onClick = onRemoveClicked)
+                        .clip(CircleShape)
                 )
             }
         )
@@ -53,6 +55,7 @@ fun MemberInput(
                 .background(color = member.color, shape = CircleShape)
                 .align(CenterVertically)
                 .size(40.dp)
+                .clip(CircleShape)
                 .clickable(onClick = onColorClicked)
         )
     }

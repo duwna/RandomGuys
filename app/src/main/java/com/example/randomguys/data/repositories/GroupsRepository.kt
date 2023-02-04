@@ -32,7 +32,7 @@ class GroupsRepository @Inject constructor(
         val membersDtoList = group.items.map {
             GroupMemberDto.newBuilder()
                 .setName(it.name)
-                .setColor(it.color.value.toLong())
+                .setColor(it.color.value.toString())
                 .build()
         }
 

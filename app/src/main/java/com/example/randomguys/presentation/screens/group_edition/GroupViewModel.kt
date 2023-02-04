@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
@@ -64,7 +65,7 @@ class GroupViewModel @Inject constructor(
     }
 
     fun addMember() = updateMembersList {
-        add(RouletteItem(name = "", color = Color.Black))
+        add(RouletteItem.create())
     }
 
     fun showColorPicker(index: Int) {
@@ -95,14 +96,11 @@ class GroupViewModel @Inject constructor(
     private fun createGroup() {
         val group = RouletteGroup.create()
         _state.update { it.copy(group = group) }
-
-        viewModelScope.launch {
-            repository.saveGroup(group)
-        }
     }
 
     private fun startSavingGroupOnDataChanges() {
         _state
+            .onStart { delay(500) }
             .distinctUntilChanged { old, new -> old.group?.items == new.group?.items }
             .debounce(500)
             .mapNotNull { it.group }

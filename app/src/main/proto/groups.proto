@@ -5,7 +5,7 @@ option java_multiple_files = true;
 
 message GroupMemberDto {
   string name = 1;
-  uint64 color = 2;
+  string color = 2;
 }
 
 message GroupDto {

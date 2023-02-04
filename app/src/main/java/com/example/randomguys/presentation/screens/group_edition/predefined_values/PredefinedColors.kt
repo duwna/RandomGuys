@@ -1,4 +1,4 @@
-package com.example.randomguys.presentation.screens.group_edition.color_picker
+package com.example.randomguys.presentation.screens.group_edition.predefined_values
 
 import androidx.compose.ui.graphics.Color
 
@@ -43,6 +43,8 @@ object PredefinedColors {
         Color(0xFFC3B264),
         Color(0xFFB8A23D),
         Color(0xFFE7D376),
-        Color(0xFFE7D583)
+        Color(0xFFE7D583),
+        Color(0xFF7766B3),
+        Color(0xFF7E6EB3),
     )
 }
