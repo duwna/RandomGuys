@@ -3,7 +3,6 @@ package com.example.randomguys.data.repositories
 import com.example.randomguys.data.PersistentStorage
 import com.example.randomguys.domain.models.Settings
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -16,10 +15,6 @@ class SettingsRepository @Inject constructor(
     fun observeSettings(): Flow<Settings> = persistentStorage.observeSettings()
         .map(Settings.Companion::fromDto)
 
-    suspend fun getDuration() = observeSettings().first().rotationDuration / 100f
-
-    suspend fun getRotation() = observeSettings().first().rotationsCount / 100f
-
     suspend fun saveDuration(duration: Float) = persistentStorage.saveSettings {
         setRotationDuration((duration * 100).toInt())
     }
@@ -28,4 +23,7 @@ class SettingsRepository @Inject constructor(
         setRotationsCount((rotation * 100).toInt())
     }
 
+    suspend fun saveSelectedGroupId(id: String) = persistentStorage.saveSettings {
+        setSelectedGroupId(id)
+    }
 }

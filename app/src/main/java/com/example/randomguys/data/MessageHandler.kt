@@ -2,11 +2,10 @@ package com.example.randomguys.data
 
 import android.content.Context
 import androidx.annotation.StringRes
+import com.example.randomguys.presentation.utils.mutableEventFlow
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
@@ -14,10 +13,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 class MessageHandler {
 
-    private val messageFlow = MutableSharedFlow<MessageEvent>(
-        extraBufferCapacity = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
+    private val messageFlow = mutableEventFlow<MessageEvent>()
 
     fun observeMessages(): Flow<MessageEvent> = messageFlow
 

@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun MainNavHost(navController: NavHostController) {
-        NavHost(navController, startDestination = Screen.SETTINGS.route) {
+        NavHost(navController, startDestination = Screen.MAIN.route) {
             composable(Screen.MAIN.route) { MainScreen() }
             composable(Screen.SETTINGS.route) { SettingsScreen() }
             composable(Screen.GROUP.route, GroupEditionNavArgs.getNamedNavArgs()) { GroupScreen() }

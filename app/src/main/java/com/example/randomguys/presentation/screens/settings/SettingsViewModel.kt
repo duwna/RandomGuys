@@ -4,6 +4,9 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.randomguys.data.MessageHandler
+import com.example.randomguys.data.launchHandlingErrors
+import com.example.randomguys.data.messageHandler
 import com.example.randomguys.data.repositories.GroupsRepository
 import com.example.randomguys.data.repositories.SettingsRepository
 import com.example.randomguys.navigation.Navigator
@@ -15,7 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,7 +26,8 @@ class SettingsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val groupsRepository: GroupsRepository,
     private val vibrator: Vibrator,
-    private val navigator: Navigator
+    private val navigator: Navigator,
+    private val messageHandler: MessageHandler
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(SettingsViewState())
@@ -43,7 +47,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun saveDuration() {
-        viewModelScope.launch {
+        viewModelScope.launchHandlingErrors(messageHandler) {
             settingsRepository.saveDuration(state.value.selectedDuration)
         }
     }
@@ -55,13 +59,17 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun saveRotationsCount() {
-        viewModelScope.launch {
+        viewModelScope.launchHandlingErrors(messageHandler) {
             settingsRepository.saveRotation(state.value.selectedRotation)
         }
     }
 
     fun onGroupSelected(id: String) {
         updateState { copy(selectedGroupId = id) }
+
+        viewModelScope.launchHandlingErrors(messageHandler) {
+            settingsRepository.saveSelectedGroupId(id)
+        }
     }
 
     fun navigateToGroup(id: String? = null) {
@@ -73,11 +81,13 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun setInitialData() {
-        viewModelScope.launch {
+        viewModelScope.launchHandlingErrors(messageHandler) {
+            val settings = settingsRepository.observeSettings().first()
             updateState {
                 copy(
-                    selectedDuration = settingsRepository.getDuration(),
-                    selectedRotation = settingsRepository.getRotation(),
+                    selectedDuration = settings.rotationDuration / 100f,
+                    selectedRotation = settings.rotationsCount / 100f,
+                    selectedGroupId = settings.selectedGroupId,
                     groups = groupsRepository.observeGroups().first()
                 )
             }
@@ -88,7 +98,7 @@ class SettingsViewModel @Inject constructor(
         groupsRepository
             .observeGroups()
             .onEach { updateState { copy(groups = it) } }
-            .launchIn(viewModelScope)
+            .launchIn(viewModelScope + messageHandler(messageHandler))
     }
 
     private fun vibrateIfValueChanged(oldValue: Float, newValue: Float) {

@@ -3,7 +3,7 @@ package com.example.randomguys.presentation.screens.main
 import com.example.randomguys.domain.models.RouletteItem
 
 data class MainViewState(
-    val rouletteItems: List<RouletteItem>,
+    val rouletteItems: List<RouletteItem> = emptyList(),
     val rouletteRotationDuration: Int = 5000,
     val rouletteRotationsCount: Int = 10,
     val rouletteRotationAngle: Int? = null

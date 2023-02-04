@@ -24,7 +24,6 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import javax.inject.Inject
 
@@ -33,6 +32,7 @@ class GroupViewModel @Inject constructor(
     private val repository: GroupsRepository,
     private val errorHandler: MessageHandler,
     private val navigator: Navigator,
+    private val messageHandler: MessageHandler,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -57,7 +57,7 @@ class GroupViewModel @Inject constructor(
 
         if (checkNotNull(state.value.group).items.isEmpty()) {
             errorHandler.showError(MessageEvent.Id(R.string.no_members_in_group_message))
-            viewModelScope.launch {
+            viewModelScope.launchHandlingErrors(messageHandler) {
                 delay(500)
                 navigator.popBackStack()
             }

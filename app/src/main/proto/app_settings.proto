@@ -6,4 +6,5 @@ option java_multiple_files = true;
 message AppSettingsDto {
   uint32 rotation_duration = 1;
   uint32 rotations_count = 2;
+  string selectedGroupId = 3;
 }

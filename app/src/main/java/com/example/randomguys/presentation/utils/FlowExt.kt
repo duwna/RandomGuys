@@ -14,11 +14,11 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 @SuppressLint("ComposableNaming")
 @Composable
-fun <T> Flow<T>.collectAsEffect(
+fun <T> Flow<T>.collectAsEvent(
     context: CoroutineContext = EmptyCoroutineContext,
     block: (T) -> Unit
 ) {
-    LaunchedEffect(key1 = Unit) {
+    LaunchedEffect(Unit) {
         onEach(block).flowOn(context).launchIn(this)
     }
 }
