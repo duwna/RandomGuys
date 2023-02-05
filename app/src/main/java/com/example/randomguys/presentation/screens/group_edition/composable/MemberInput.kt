@@ -42,8 +42,8 @@ fun MemberInput(
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                     contentDescription = "remove member",
                     modifier = Modifier
-                        .clickable(onClick = onRemoveClicked)
                         .clip(CircleShape)
+                        .clickable(onClick = onRemoveClicked)
                 )
             }
         )

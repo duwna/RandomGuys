@@ -38,11 +38,15 @@ fun GroupItem(
         ),
         shape = RoundedCornerShape(12.dp)
     ) {
-        Row(modifier = Modifier.fillMaxSize()) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+        ) {
 
             FlowRow(modifier = Modifier.weight(1f)) {
                 group.items.forEach { item ->
-                    GroupMember(member = item, Modifier.padding(8.dp))
+                    GroupMember(member = item)
                 }
             }
 
@@ -50,9 +54,10 @@ fun GroupItem(
                 painter = painterResource(id = R.drawable.icon_edit),
                 contentDescription = "edit group",
                 modifier = Modifier
-                    .size(40.dp)
+                    .size(44.dp)
+                    .padding(4.dp)
+                    .background(color = MaterialTheme.colorScheme.secondary, shape = CircleShape)
                     .padding(8.dp)
-                    .background(color = MaterialTheme.colorScheme.primary, shape = CircleShape)
                     .clickable(onClick = onGroupClicked)
             )
         }

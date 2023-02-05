@@ -40,7 +40,7 @@ fun AnimatedIndicator(
         modifier = modifier
             .size(200.dp)
             .background(
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.secondary,
                 shape = CircleShape
             )
             .rotate(indicatorRotation)
