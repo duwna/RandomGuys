@@ -1,13 +1,23 @@
 package com.example.randomguys.presentation.screens.settings
 
 import com.example.randomguys.domain.models.RouletteGroup
+import com.example.randomguys.domain.models.Settings.Companion.DEFAULT_ROTATIONS_COUNT
+import com.example.randomguys.domain.models.Settings.Companion.DEFAULT_ROTATION_DURATION_SECONDS
+import com.example.randomguys.domain.models.Settings.Companion.rotationDurationRange
+import com.example.randomguys.domain.models.Settings.Companion.rotationsCountRange
+import com.example.randomguys.presentation.utils.SliderFractionUtils
 
 data class SettingsViewState(
-    val selectedDuration: Float = 0f,
-    val selectedRotation: Float = 0f,
-    val selectedGroupId: String? = null,
-    val groups: List<RouletteGroup> = emptyList()
+    val rotationDuration: Int = DEFAULT_ROTATION_DURATION_SECONDS,
+    val rotationsCount: Int = DEFAULT_ROTATIONS_COUNT,
+    val groups: List<RouletteGroup> = emptyList(),
+    val selectedGroupId: String? = groups.firstOrNull()?.id
 ) {
-    val durationText get() = (selectedDuration * 100).toInt().toString()
-    val rotationText get() = (selectedRotation * 100).toInt().toString()
+
+    val durationSliderValue: Float
+        get() = SliderFractionUtils.getSliderFraction(rotationDurationRange, rotationDuration)
+
+    val rotationsCountSliderValue: Float
+        get() = SliderFractionUtils.getSliderFraction(rotationsCountRange, rotationsCount)
+
 }

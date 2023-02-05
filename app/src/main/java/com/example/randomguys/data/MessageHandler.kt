@@ -17,7 +17,7 @@ class MessageHandler {
 
     fun observeMessages(): Flow<MessageEvent> = messageFlow
 
-    fun showError(errorEvent: MessageEvent) {
+    fun showMessage(errorEvent: MessageEvent) {
         messageFlow.tryEmit(errorEvent)
 
         if (errorEvent is MessageEvent.Error) {
@@ -27,23 +27,30 @@ class MessageHandler {
 
 }
 
-sealed class MessageEvent {
+sealed class MessageEvent(val durationMillis: Long = DURATION) {
+    companion object {
+        private const val DURATION = 1000L
+    }
 
     abstract fun text(context: Context): String
 
-    class Message(val message: String) : MessageEvent() {
+    class Message(val message: String, durationMillis: Long = DURATION) : MessageEvent(durationMillis) {
         override fun text(context: Context): String = message
     }
 
-    class Error(val throwable: Throwable) : MessageEvent() {
+    class Error(val throwable: Throwable, durationMillis: Long = DURATION) : MessageEvent(durationMillis) {
         override fun text(context: Context): String = throwable.message.orEmpty()
     }
 
-    class Id(@StringRes val messageId: Int) : MessageEvent() {
+    class Id(@StringRes val messageId: Int, durationMillis: Long = DURATION) : MessageEvent(durationMillis) {
         override fun text(context: Context): String = context.getString(messageId)
     }
 
-    class WithArgs(@StringRes val messageId: Int, private vararg val args: Any) : MessageEvent() {
+    class WithArgs(
+        @StringRes val messageId: Int,
+        durationMillis: Long = DURATION,
+        private vararg val args: Any
+    ) : MessageEvent(durationMillis) {
         override fun text(context: Context): String = context.getString(messageId, args)
     }
 }
@@ -58,5 +65,5 @@ fun CoroutineScope.launchHandlingErrors(
 }
 
 fun messageHandler(messageHandler: MessageHandler) = CoroutineExceptionHandler { _, throwable ->
-    messageHandler.showError(MessageEvent.Error(throwable))
+    messageHandler.showMessage(MessageEvent.Error(throwable))
 }

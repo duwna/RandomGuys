@@ -1,11 +1,12 @@
 package com.example.randomguys.presentation.screens.main
 
 import com.example.randomguys.domain.models.RouletteItem
+import com.example.randomguys.domain.models.Settings
 
 data class MainViewState(
     val rouletteItems: List<RouletteItem> = emptyList(),
-    val rouletteRotationDuration: Int = 5000,
-    val rouletteRotationsCount: Int = 10,
+    val rotationDuration: Int = Settings.DEFAULT_ROTATION_DURATION_SECONDS,
+    val rotationsCount: Int = Settings.DEFAULT_ROTATIONS_COUNT,
     val rouletteRotationAngle: Int? = null
 ) {
 

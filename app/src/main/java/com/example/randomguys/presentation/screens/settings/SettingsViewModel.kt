@@ -9,9 +9,12 @@ import com.example.randomguys.data.launchHandlingErrors
 import com.example.randomguys.data.messageHandler
 import com.example.randomguys.data.repositories.GroupsRepository
 import com.example.randomguys.data.repositories.SettingsRepository
+import com.example.randomguys.domain.models.Settings.Companion.rotationDurationRange
+import com.example.randomguys.domain.models.Settings.Companion.rotationsCountRange
 import com.example.randomguys.navigation.Navigator
 import com.example.randomguys.presentation.Screen
 import com.example.randomguys.presentation.screens.group_edition.GroupEditionNavArgs
+import com.example.randomguys.presentation.utils.SliderFractionUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -40,27 +43,29 @@ class SettingsViewModel @Inject constructor(
         observeGroupsChanges()
     }
 
-    fun onDurationChanged(duration: Float) {
-        val oldDuration = state.value.selectedDuration
-        updateState { copy(selectedDuration = duration) }
-        vibrateIfValueChanged(oldDuration, duration)
+    fun onRotationsCountChanged(rotationFraction: Float) {
+        val oldRotationCount = state.value.rotationsCount
+        val newRotationsCount = SliderFractionUtils.getValueFromFraction(rotationsCountRange, rotationFraction)
+        updateState { copy(rotationsCount = newRotationsCount) }
+        if (oldRotationCount != newRotationsCount) vibrator.vibrate(sliderVibrationEffect)
+    }
+
+    fun onDurationChanged(durationFraction: Float) {
+        val oldDuration = state.value.rotationDuration
+        val newDuration = SliderFractionUtils.getValueFromFraction(rotationDurationRange, durationFraction)
+        updateState { copy(rotationDuration = newDuration) }
+        if (oldDuration != newDuration) vibrator.vibrate(sliderVibrationEffect)
     }
 
     fun saveDuration() {
         viewModelScope.launchHandlingErrors(messageHandler) {
-            settingsRepository.saveDuration(state.value.selectedDuration)
+            settingsRepository.saveDuration(state.value.rotationDuration)
         }
-    }
-
-    fun onRotationsCountChanged(rotation: Float) {
-        val oldRotation = state.value.selectedRotation
-        updateState { copy(selectedRotation = rotation) }
-        vibrateIfValueChanged(oldRotation, rotation)
     }
 
     fun saveRotationsCount() {
         viewModelScope.launchHandlingErrors(messageHandler) {
-            settingsRepository.saveRotation(state.value.selectedRotation)
+            settingsRepository.saveRotationsCount(state.value.rotationsCount)
         }
     }
 
@@ -85,8 +90,8 @@ class SettingsViewModel @Inject constructor(
             val settings = settingsRepository.observeSettings().first()
             updateState {
                 copy(
-                    selectedDuration = settings.rotationDuration / 100f,
-                    selectedRotation = settings.rotationsCount / 100f,
+                    rotationDuration = settings.rotationDuration,
+                    rotationsCount = settings.rotationsCount,
                     selectedGroupId = settings.selectedGroupId,
                     groups = groupsRepository.observeGroups().first()
                 )
@@ -99,12 +104,6 @@ class SettingsViewModel @Inject constructor(
             .observeGroups()
             .onEach { updateState { copy(groups = it) } }
             .launchIn(viewModelScope + messageHandler(messageHandler))
-    }
-
-    private fun vibrateIfValueChanged(oldValue: Float, newValue: Float) {
-        if ((oldValue * 100).toInt() != (newValue * 100).toInt()) {
-            vibrator.vibrate(sliderVibrationEffect)
-        }
     }
 
     private inline fun updateState(updateAction: SettingsViewState.() -> SettingsViewState) {

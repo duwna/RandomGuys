@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults.cardElevation
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,8 +32,10 @@ fun ColorPickerDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
 
-        val itemsInRow = 7
-        val colorRows = PredefinedColors.list.chunked(itemsInRow)
+        val colorRows = remember {
+            val itemsInRow = 7
+            PredefinedColors.list.shuffled().chunked(itemsInRow)
+        }
 
         Card(elevation = cardElevation(16.dp)) {
 

@@ -44,8 +44,11 @@ fun SnackbarScaffold(
                         duration = SnackbarDuration.Indefinite
                     )
                 }
-                delay(1000)
-                showJob.cancel()
+
+                launch {
+                    delay(event.durationMillis)
+                    showJob.cancel()
+                }
             }
     }
 

@@ -38,29 +38,6 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
             .verticalScroll(rememberScrollState())
     ) {
 
-        SliderWithText(
-            selectedText = stringResource(id = R.string.settings_duration_title, state.durationText),
-            selectedValue = state.selectedDuration,
-            onValueChanged = viewModel::onDurationChanged,
-            onValueChangeFinished = viewModel::saveDuration
-        )
-
-        SliderWithText(
-            selectedText = stringResource(id = R.string.settings_rotation_title, state.rotationText),
-            selectedValue = state.selectedRotation,
-            onValueChanged = viewModel::onRotationsCountChanged,
-            onValueChangeFinished = viewModel::saveRotationsCount
-        )
-
-        Text(
-            text = stringResource(id = R.string.settings_indicator_title),
-            fontSize = 26.sp,
-            fontWeight = FontWeight.Medium,
-            modifier = Modifier.padding(20.dp)
-        )
-
-        AnimatedIndicator(modifier = Modifier.align(CenterHorizontally))
-
         Text(
             text = stringResource(id = R.string.settings_groups_title),
             fontSize = 26.sp,
@@ -91,5 +68,28 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
         {
             Text(text = stringResource(R.string.add_group_button))
         }
+
+        Text(
+            text = stringResource(id = R.string.settings_indicator_title),
+            fontSize = 26.sp,
+            fontWeight = FontWeight.Medium,
+            modifier = Modifier.padding(20.dp)
+        )
+
+        AnimatedIndicator(modifier = Modifier.align(CenterHorizontally))
+
+        SliderWithText(
+            selectedText = stringResource(id = R.string.settings_duration_title, state.rotationDuration),
+            selectedValue = state.durationSliderValue,
+            onValueChanged = viewModel::onDurationChanged,
+            onValueChangeFinished = viewModel::saveDuration
+        )
+
+        SliderWithText(
+            selectedText = stringResource(id = R.string.settings_rotation_title, state.rotationsCount),
+            selectedValue = state.rotationsCountSliderValue,
+            onValueChanged = viewModel::onRotationsCountChanged,
+            onValueChangeFinished = viewModel::saveRotationsCount
+        )
     }
 }

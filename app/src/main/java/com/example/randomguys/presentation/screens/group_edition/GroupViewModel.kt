@@ -56,7 +56,7 @@ class GroupViewModel @Inject constructor(
         }
 
         if (checkNotNull(state.value.group).items.isEmpty()) {
-            errorHandler.showError(MessageEvent.Id(R.string.no_members_in_group_message))
+            errorHandler.showMessage(MessageEvent.Id(R.string.no_members_in_group_message))
             viewModelScope.launchHandlingErrors(messageHandler) {
                 delay(500)
                 navigator.popBackStack()

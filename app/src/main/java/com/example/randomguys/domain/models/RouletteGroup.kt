@@ -15,9 +15,9 @@ data class RouletteGroup(
             items = dto.membersList.map(RouletteItem.Companion::fromDto)
         )
 
-        fun create() = RouletteGroup(
+        fun create(itemsSize: Int = 3) = RouletteGroup(
             id = UUID.randomUUID().toString(),
-            items = listOf(RouletteItem.create())
+            items = List(itemsSize) { RouletteItem.create() }
         )
     }
 }

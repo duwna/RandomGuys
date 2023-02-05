@@ -30,7 +30,7 @@ fun AnimatedRoulette(
     items: List<RouletteItem>,
     modifier: Modifier = Modifier,
     initialAngle: Int? = null,
-    rotationDuration: Int = 5000,
+    rotationDurationSeconds: Int = 5000,
     rotationsCount: Int = 10,
     onAngleChanged: (Int?) -> Unit = {}
 ) {
@@ -53,7 +53,7 @@ fun AnimatedRoulette(
                         animatedRotation.animateTo(
                             targetValue = rotationsCount * 360f + targetAngle,
                             animationSpec = tween(
-                                durationMillis = rotationDuration,
+                                durationMillis = rotationDurationSeconds * 1000,
                                 easing = LinearOutSlowInEasing
                             ),
                         )

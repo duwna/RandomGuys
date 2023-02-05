@@ -15,12 +15,12 @@ class SettingsRepository @Inject constructor(
     fun observeSettings(): Flow<Settings> = persistentStorage.observeSettings()
         .map(Settings.Companion::fromDto)
 
-    suspend fun saveDuration(duration: Float) = persistentStorage.saveSettings {
-        setRotationDuration((duration * 100).toInt())
+    suspend fun saveDuration(duration: Int) = persistentStorage.saveSettings {
+        setRotationDuration(duration)
     }
 
-    suspend fun saveRotation(rotation: Float) = persistentStorage.saveSettings {
-        setRotationsCount((rotation * 100).toInt())
+    suspend fun saveRotationsCount(rotationsCount: Int) = persistentStorage.saveSettings {
+        setRotationsCount(rotationsCount)
     }
 
     suspend fun saveSelectedGroupId(id: String) = persistentStorage.saveSettings {
