@@ -5,6 +5,7 @@ import android.os.Vibrator
 import androidx.core.content.getSystemService
 import com.example.randomguys.data.MessageHandler
 import com.example.randomguys.data.PersistentStorage
+import com.example.randomguys.data.ResourceManager
 import com.example.randomguys.navigation.Navigator
 import com.example.randomguys.navigation.NavigatorImpl
 import dagger.Module
@@ -26,6 +27,10 @@ object AppModule {
     @Provides
     fun provideVibrator(@ApplicationContext context: Context): Vibrator =
         requireNotNull(context.getSystemService())
+
+    @Provides
+    fun provideResourceManager(@ApplicationContext context: Context): ResourceManager =
+        ResourceManager(context)
 
     @Provides
     @Singleton

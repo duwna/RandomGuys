@@ -16,7 +16,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 @Composable
 fun <T> Flow<T>.collectAsEvent(
     context: CoroutineContext = EmptyCoroutineContext,
-    block: (T) -> Unit
+    block: suspend (T) -> Unit
 ) {
     LaunchedEffect(Unit) {
         onEach(block).flowOn(context).launchIn(this)

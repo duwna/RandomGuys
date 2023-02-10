@@ -2,8 +2,9 @@ package com.example.randomguys.domain.models
 
 import androidx.compose.ui.graphics.Color
 import com.example.randomguys.GroupMemberDto
+import com.example.randomguys.R
+import com.example.randomguys.data.ResourceManager
 import com.example.randomguys.presentation.screens.group_edition.predefined_values.PredefinedColors
-import com.example.randomguys.presentation.screens.group_edition.predefined_values.PredefinedNames
 
 data class RouletteItem(
     val name: String,
@@ -17,8 +18,8 @@ data class RouletteItem(
             color = Color(dto.color.toULong())
         )
 
-        fun create() = RouletteItem(
-            name = PredefinedNames.list.random(),
+        fun create(resourceManager: ResourceManager) = RouletteItem(
+            name = resourceManager.stringArray(R.array.predefined_names).random(),
             color = PredefinedColors.list.random()
         )
     }

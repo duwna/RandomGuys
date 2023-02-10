@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.randomguys.R
 import com.example.randomguys.data.MessageEvent
 import com.example.randomguys.data.MessageHandler
+import com.example.randomguys.data.ResourceManager
 import com.example.randomguys.data.launchHandlingErrors
 import com.example.randomguys.data.messageHandler
 import com.example.randomguys.data.repositories.GroupsRepository
@@ -33,6 +34,7 @@ class GroupViewModel @Inject constructor(
     private val errorHandler: MessageHandler,
     private val navigator: Navigator,
     private val messageHandler: MessageHandler,
+    private val resourceManager: ResourceManager,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -65,7 +67,7 @@ class GroupViewModel @Inject constructor(
     }
 
     fun addMember() = updateMembersList {
-        add(RouletteItem.create())
+        add(RouletteItem.create(resourceManager))
     }
 
     fun showColorPicker(index: Int) {
@@ -94,7 +96,7 @@ class GroupViewModel @Inject constructor(
     }
 
     private fun createGroup() {
-        val group = RouletteGroup.create()
+        val group = RouletteGroup.create(resourceManager)
         _state.update { it.copy(group = group) }
     }
 

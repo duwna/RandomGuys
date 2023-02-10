@@ -1,6 +1,7 @@
 package com.example.randomguys.presentation.screens.main.composable
 
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -23,6 +24,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.randomguys.R
 import com.example.randomguys.domain.models.RouletteItem
+import com.example.randomguys.presentation.screens.main.MainScreenEvent
+import com.example.randomguys.presentation.utils.collectAsEvent
+import com.example.randomguys.presentation.utils.mutableEventFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 @Composable
@@ -32,10 +38,23 @@ fun AnimatedRoulette(
     initialAngle: Int? = null,
     rotationDurationSeconds: Int = 5000,
     rotationsCount: Int = 10,
-    onAngleChanged: (Int?) -> Unit = {}
+    onAngleChanged: (Int?) -> Unit = {},
+    mainScreenEvent: Flow<MainScreenEvent> = mutableEventFlow()
 ) {
     val animationScope = rememberCoroutineScope()
     val animatedRotation = remember { Animatable(initialAngle?.toFloat() ?: 0f) }
+
+    mainScreenEvent.collectAsEvent { event ->
+        when (event) {
+            MainScreenEvent.StartRoulette -> {
+                startAnimating(rotationsCount, rotationDurationSeconds, animationScope, animatedRotation, onAngleChanged)
+            }
+            MainScreenEvent.StopRoulette -> {
+                animatedRotation.stop()
+                animatedRotation.snapTo(0f)
+            }
+        }
+    }
 
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
 
@@ -45,22 +64,7 @@ fun AnimatedRoulette(
                 .fillMaxSize()
                 .clip(CircleShape)
                 .clickable(enabled = !animatedRotation.isRunning) {
-                    onAngleChanged.invoke(null)
-
-                    animationScope.launch {
-                        val targetAngle = (0 until 360).random()
-
-                        animatedRotation.animateTo(
-                            targetValue = rotationsCount * 360f + targetAngle,
-                            animationSpec = tween(
-                                durationMillis = rotationDurationSeconds * 1000,
-                                easing = LinearOutSlowInEasing
-                            ),
-                        )
-
-                        animatedRotation.snapTo(targetAngle.toFloat())
-                        onAngleChanged.invoke(targetAngle)
-                    }
+                    startAnimating(rotationsCount, rotationDurationSeconds, animationScope, animatedRotation, onAngleChanged)
                 }
         )
 
@@ -72,6 +76,33 @@ fun AnimatedRoulette(
                 .padding(30.dp)
                 .rotate(animatedRotation.value)
         )
+    }
+}
+
+private fun startAnimating(
+    rotationsCount: Int,
+    rotationDurationSeconds: Int,
+    animationScope: CoroutineScope,
+    animatedRotation: Animatable<Float, AnimationVector1D>,
+    onAngleChanged: (Int?) -> Unit = {}
+) {
+    onAngleChanged.invoke(null)
+
+    animationScope.launch {
+        animatedRotation.stop()
+
+        val targetAngle = (0 until 360).random()
+
+        animatedRotation.animateTo(
+            targetValue = rotationsCount * 360f + targetAngle,
+            animationSpec = tween(
+                durationMillis = rotationDurationSeconds * 1000,
+                easing = LinearOutSlowInEasing
+            ),
+        )
+
+        animatedRotation.snapTo(targetAngle.toFloat())
+        onAngleChanged.invoke(targetAngle)
     }
 }
 

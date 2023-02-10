@@ -1,6 +1,7 @@
 package com.example.randomguys.domain.models
 
 import com.example.randomguys.GroupDto
+import com.example.randomguys.data.ResourceManager
 import java.util.UUID
 
 data class RouletteGroup(
@@ -15,9 +16,9 @@ data class RouletteGroup(
             items = dto.membersList.map(RouletteItem.Companion::fromDto)
         )
 
-        fun create(itemsSize: Int = 3) = RouletteGroup(
+        fun create(resourceManager: ResourceManager, itemsSize: Int = 3) = RouletteGroup(
             id = UUID.randomUUID().toString(),
-            items = List(itemsSize) { RouletteItem.create() }
+            items = List(itemsSize) { RouletteItem.create(resourceManager) }
         )
     }
 }
