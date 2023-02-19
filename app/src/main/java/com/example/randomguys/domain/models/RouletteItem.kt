@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 import com.example.randomguys.GroupMemberDto
 import com.example.randomguys.R
 import com.example.randomguys.data.ResourceManager
-import com.example.randomguys.presentation.screens.group_edition.predefined_values.PredefinedColors
+import com.example.randomguys.presentation.screens.group_edition.predefined_values.PredefinedColorList
 
 data class RouletteItem(
     val name: String,
@@ -20,7 +20,7 @@ data class RouletteItem(
 
         fun create(resourceManager: ResourceManager) = RouletteItem(
             name = resourceManager.stringArray(R.array.predefined_names).random(),
-            color = PredefinedColors.list.random()
+            color = PredefinedColorList.random()
         )
     }
 }

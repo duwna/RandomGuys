@@ -8,8 +8,7 @@ import com.example.randomguys.R
 import com.example.randomguys.data.MessageEvent
 import com.example.randomguys.data.MessageHandler
 import com.example.randomguys.data.ResourceManager
-import com.example.randomguys.data.launchHandlingErrors
-import com.example.randomguys.data.messageHandler
+import com.example.randomguys.data.exceptionHandler
 import com.example.randomguys.data.repositories.GroupsRepository
 import com.example.randomguys.domain.models.RouletteGroup
 import com.example.randomguys.domain.models.RouletteItem
@@ -25,6 +24,7 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import javax.inject.Inject
 
@@ -59,7 +59,7 @@ class GroupViewModel @Inject constructor(
 
         if (checkNotNull(state.value.group).items.isEmpty()) {
             errorHandler.showMessage(MessageEvent.Id(R.string.no_members_in_group_message))
-            viewModelScope.launchHandlingErrors(messageHandler) {
+            viewModelScope.launch(exceptionHandler(messageHandler)) {
                 delay(500)
                 navigator.popBackStack()
             }
@@ -90,7 +90,7 @@ class GroupViewModel @Inject constructor(
     }
 
     private fun loadGroup(groupId: String) {
-        viewModelScope.launchHandlingErrors(errorHandler) {
+        viewModelScope.launch(exceptionHandler(messageHandler)) {
             _state.update { it.copy(group = repository.getGroup(groupId)) }
         }
     }
@@ -107,6 +107,6 @@ class GroupViewModel @Inject constructor(
             .debounce(500)
             .mapNotNull { it.group }
             .onEach(repository::saveGroup)
-            .launchIn(viewModelScope + messageHandler(errorHandler))
+            .launchIn(viewModelScope + exceptionHandler(errorHandler))
     }
 }

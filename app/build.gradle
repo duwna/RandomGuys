@@ -7,6 +7,18 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file("keystore.jks")
+
+            storePassword "1234567890"
+            keyAlias 'key0'
+            keyPassword '1234567890'
+
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
     namespace 'com.example.randomguys'
     compileSdk 33
 
@@ -24,9 +36,18 @@ android {
     }
 
     buildTypes {
-        release {
+        debug {
+            versionNameSuffix ".debug"
             minifyEnabled false
+            shrinkResources false
+        }
+
+        release {
+            minifyEnabled true
+            shrinkResources true
+
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {

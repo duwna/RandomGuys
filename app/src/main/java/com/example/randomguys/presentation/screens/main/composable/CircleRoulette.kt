@@ -1,5 +1,12 @@
 package com.example.randomguys.presentation.screens.main.composable
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.with
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -16,20 +23,31 @@ fun CircleRoulette(
 ) {
     val sweepAngle = 360f / items.size
 
-    Canvas(modifier = modifier) {
-        items.forEachIndexed { index, item ->
-            drawArc(
-                color = item.color,
-                startAngle = sweepAngle * index,
-                sweepAngle = sweepAngle,
-                useCenter = true
-            )
+    @OptIn(ExperimentalAnimationApi::class)
+    AnimatedContent(
+        targetState = items,
+        transitionSpec = {
+            // TODO
+            fadeIn(animationSpec = tween(220, delayMillis = 90)) +
+                    scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90)) with
+                    fadeOut(animationSpec = tween(220))
+        }
+    ) {
+        Canvas(modifier = modifier) {
+            items.forEachIndexed { index, item ->
+                drawArc(
+                    color = item.color,
+                    startAngle = sweepAngle * index,
+                    sweepAngle = sweepAngle,
+                    useCenter = true
+                )
+            }
         }
     }
 
     CircleTextList(
         modifier = modifier,
-        items = items.map { it.name }
+        items = items
     )
 }
 

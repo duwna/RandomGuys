@@ -6,10 +6,14 @@ import com.example.randomguys.domain.models.Settings
 data class MainViewState(
     val rouletteItems: List<RouletteItem> = emptyList(),
     val autoRouletteState: AutoRouletteState = AutoRouletteState.Off,
-    val rotationDuration: Int = Settings.DEFAULT_ROTATION_DURATION_SECONDS,
-    val rotationsCount: Int = Settings.DEFAULT_ROTATIONS_COUNT,
-    val rouletteRotationAngle: Int? = null
+    val indicatorState: IndicatorState = IndicatorState()
 ) {
+    data class IndicatorState(
+        val isAnimating: Boolean = false,
+        val rotationDuration: Int = Settings.DEFAULT_ROTATION_DURATION_SECONDS,
+        val rotationsCount: Int = Settings.DEFAULT_ROTATIONS_COUNT,
+        val currentRotationAngle: Int? = null
+    )
 
     sealed class AutoRouletteState {
 
@@ -21,20 +25,14 @@ data class MainViewState(
     }
 
     fun getSelectedRouletteItem(): RouletteItem? {
-        rouletteRotationAngle ?: return null
+        val angle = indicatorState.currentRotationAngle ?: return null
 
         val step = 360 / rouletteItems.size
-        val selectedIndex = rouletteRotationAngle / step
+        val selectedIndex = angle / step
 
         return rouletteItems[selectedIndex]
     }
 
     val isAutoRouletteFinished
         get() = autoRouletteState == AutoRouletteState.Playing && rouletteItems.size == 2
-}
-
-sealed class MainScreenEvent {
-    object StartRoulette : MainScreenEvent()
-
-    object StopRoulette : MainScreenEvent()
 }

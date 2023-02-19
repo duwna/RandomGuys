@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.example.randomguys.R
 
 @Composable
-fun AnimatedIndicator(
+fun InfiniteRotatingIndicator(
     modifier: Modifier = Modifier
 ) {
     val transition = rememberInfiniteTransition()

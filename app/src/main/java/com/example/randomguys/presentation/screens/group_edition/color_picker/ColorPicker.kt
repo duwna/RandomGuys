@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.example.randomguys.presentation.screens.group_edition.predefined_values.PredefinedColors
+import com.example.randomguys.presentation.screens.group_edition.predefined_values.PredefinedColorList
 
 @Composable
 fun ColorPickerDialog(
@@ -33,8 +33,9 @@ fun ColorPickerDialog(
     ) {
 
         val colorRows = remember {
+            val rowsCount = 6
             val itemsInRow = 7
-            PredefinedColors.list.shuffled().chunked(itemsInRow)
+            PredefinedColorList.shuffled().chunked(itemsInRow).take(rowsCount)
         }
 
         Card(elevation = cardElevation(16.dp)) {

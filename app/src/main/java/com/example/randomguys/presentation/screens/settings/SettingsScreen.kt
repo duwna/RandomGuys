@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.randomguys.R
-import com.example.randomguys.presentation.screens.settings.composable.AnimatedIndicator
+import com.example.randomguys.presentation.screens.settings.composable.InfiniteRotatingIndicator
 import com.example.randomguys.presentation.screens.settings.composable.GroupItem
 import com.example.randomguys.presentation.screens.settings.composable.SliderWithText
 
@@ -76,7 +76,7 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
             modifier = Modifier.padding(20.dp)
         )
 
-        AnimatedIndicator(modifier = Modifier.align(CenterHorizontally))
+        InfiniteRotatingIndicator(modifier = Modifier.align(CenterHorizontally))
 
         SliderWithText(
             selectedText = stringResource(id = R.string.settings_duration_title, state.rotationDuration),

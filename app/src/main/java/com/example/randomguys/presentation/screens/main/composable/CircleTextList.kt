@@ -2,6 +2,7 @@ package com.example.randomguys.presentation.screens.main.composable
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -10,16 +11,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import com.example.randomguys.domain.models.RouletteItem
 import kotlin.math.cos
 import kotlin.math.sin
 
 @Composable
-fun CircleTextList(modifier: Modifier, items: List<String>) {
+fun CircleTextList(modifier: Modifier, items: List<RouletteItem>) {
 
     // used to calculate text offset because we can't get size of parent immediately
     var parentSizePx by remember { mutableStateOf(IntSize.Zero) }
@@ -32,7 +36,8 @@ fun CircleTextList(modifier: Modifier, items: List<String>) {
         if (parentSizePx != IntSize.Zero) {
             items.forEachIndexed { index, item ->
                 Text(
-                    text = item,
+                    text = item.name,
+                    color = getTextColor(background = item.color),
                     modifier = Modifier.offset(
                         x = calculateOffset(items.size, index, parentSizePx.width, ::cos),
                         y = calculateOffset(items.size, index, parentSizePx.height, ::sin)
@@ -59,3 +64,14 @@ private operator fun IntSize.div(other: Float) = IntSize(
     width = (width.toFloat() / other).toInt(),
     height = (height.toFloat() / other).toInt()
 )
+
+
+@Composable
+private fun getTextColor(background: Color): Color {
+    val luminance = background.luminance()
+
+    return when {
+        luminance > 0.5f -> MaterialTheme.colorScheme.onSurface
+        else -> MaterialTheme.colorScheme.onPrimary
+    }
+}

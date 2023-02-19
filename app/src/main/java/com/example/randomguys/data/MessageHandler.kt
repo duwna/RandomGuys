@@ -4,12 +4,8 @@ import android.content.Context
 import androidx.annotation.StringRes
 import com.example.randomguys.presentation.utils.mutableEventFlow
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import timber.log.Timber
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 
 class MessageHandler {
 
@@ -19,10 +15,6 @@ class MessageHandler {
 
     fun showMessage(errorEvent: MessageEvent) {
         messageFlow.tryEmit(errorEvent)
-
-        if (errorEvent is MessageEvent.Error) {
-            Timber.tag("MessageHandler").e(errorEvent.throwable)
-        }
     }
 
 }
@@ -55,15 +47,7 @@ sealed class MessageEvent(val durationMillis: Long = DURATION) {
     }
 }
 
-fun CoroutineScope.launchHandlingErrors(
-    errorHandler: MessageHandler,
-    coroutineContext: CoroutineContext = EmptyCoroutineContext,
-    block: suspend CoroutineScope.() -> Unit
-) {
-    val exceptionHandler = messageHandler(errorHandler)
-    launch(context = coroutineContext + exceptionHandler, block = block)
-}
-
-fun messageHandler(messageHandler: MessageHandler) = CoroutineExceptionHandler { _, throwable ->
+fun exceptionHandler(messageHandler: MessageHandler) = CoroutineExceptionHandler { _, throwable ->
+    Timber.tag("CoroutineExceptionHandler").e(throwable)
     messageHandler.showMessage(MessageEvent.Error(throwable))
 }

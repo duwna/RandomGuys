@@ -12,9 +12,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.example.randomguys.data.MessageEvent
 import com.example.randomguys.data.MessageHandler
+import com.example.randomguys.presentation.utils.noRippleClickable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -58,7 +60,10 @@ fun SnackbarScaffold(
             SnackbarHost(host) { data ->
                 Snackbar(
                     snackbarData = data,
-                    backgroundColor = snackbarColor
+                    backgroundColor = snackbarColor,
+                    modifier = Modifier.noRippleClickable {
+                        scaffoldState.snackbarHostState.currentSnackbarData?.dismiss()
+                    }
                 )
             }
         }

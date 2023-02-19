@@ -1,108 +1,40 @@
 package com.example.randomguys.presentation.screens.main.composable
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.AnimationVector1D
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.randomguys.R
 import com.example.randomguys.domain.models.RouletteItem
-import com.example.randomguys.presentation.screens.main.MainScreenEvent
-import com.example.randomguys.presentation.utils.collectAsEvent
-import com.example.randomguys.presentation.utils.mutableEventFlow
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
+import com.example.randomguys.presentation.screens.main.MainViewState
 
 @Composable
 fun AnimatedRoulette(
     items: List<RouletteItem>,
     modifier: Modifier = Modifier,
-    initialAngle: Int? = null,
-    rotationDurationSeconds: Int = 5000,
-    rotationsCount: Int = 10,
-    onAngleChanged: (Int?) -> Unit = {},
-    mainScreenEvent: Flow<MainScreenEvent> = mutableEventFlow()
+    indicatorState: MainViewState.IndicatorState = MainViewState.IndicatorState(),
+    onAngleChanged: (Int?) -> Unit = {}
 ) {
-    val animationScope = rememberCoroutineScope()
-    val animatedRotation = remember { Animatable(initialAngle?.toFloat() ?: 0f) }
-
-    mainScreenEvent.collectAsEvent { event ->
-        when (event) {
-            MainScreenEvent.StartRoulette -> {
-                startAnimating(rotationsCount, rotationDurationSeconds, animationScope, animatedRotation, onAngleChanged)
-            }
-            MainScreenEvent.StopRoulette -> {
-                animatedRotation.stop()
-                animatedRotation.snapTo(0f)
-            }
-        }
-    }
 
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
 
         CircleRoulette(
             items = items,
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(CircleShape)
-                .clickable(enabled = !animatedRotation.isRunning) {
-                    startAnimating(rotationsCount, rotationDurationSeconds, animationScope, animatedRotation, onAngleChanged)
-                }
+            modifier = Modifier.fillMaxSize()
         )
 
-        Image(
-            painter = painterResource(id = R.drawable.icon_default_roulette_indicator),
-            contentDescription = "Roulette indicator",
+        RotatingIndicator(
+            onAngleChanged = onAngleChanged,
+            indicatorState = indicatorState,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(30.dp)
-                .rotate(animatedRotation.value)
         )
-    }
-}
-
-private fun startAnimating(
-    rotationsCount: Int,
-    rotationDurationSeconds: Int,
-    animationScope: CoroutineScope,
-    animatedRotation: Animatable<Float, AnimationVector1D>,
-    onAngleChanged: (Int?) -> Unit = {}
-) {
-    onAngleChanged.invoke(null)
-
-    animationScope.launch {
-        animatedRotation.stop()
-
-        val targetAngle = (0 until 360).random()
-
-        animatedRotation.animateTo(
-            targetValue = rotationsCount * 360f + targetAngle,
-            animationSpec = tween(
-                durationMillis = rotationDurationSeconds * 1000,
-                easing = LinearOutSlowInEasing
-            ),
-        )
-
-        animatedRotation.snapTo(targetAngle.toFloat())
-        onAngleChanged.invoke(targetAngle)
     }
 }
 
@@ -115,6 +47,6 @@ private fun AnimatedRoulettePreview() {
             RouletteItem("BBBBBBB", Color.Red),
             RouletteItem("CCC", Color.Yellow)
         ),
-        modifier = Modifier.size(300.dp)
+        modifier = Modifier.size(300.dp),
     )
 }
