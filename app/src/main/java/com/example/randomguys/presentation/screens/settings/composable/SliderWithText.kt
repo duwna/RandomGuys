@@ -1,6 +1,7 @@
 package com.example.randomguys.presentation.screens.settings.composable
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +19,7 @@ fun SliderWithText(
 ) {
     Text(
         text = selectedText,
+        color = MaterialTheme.colorScheme.onBackground,
         fontSize = 26.sp,
         fontWeight = FontWeight.Medium,
         modifier = Modifier.padding(top = 20.dp, start = 20.dp)

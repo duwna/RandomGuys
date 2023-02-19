@@ -8,9 +8,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Color(0xFFD0BCFF),
-    secondary = Color(0xFFCCC2DC),
-    tertiary = Color(0xFFEFB8C8)
+    primary = Color(0xFF483B6D),
+    secondary = Color(0xFF625b71),
+    tertiary = Color(0xFF7D5260),
+    background = Color(0xFF242424),
+    surface = Color(0xFF2C2C2C),
+    onPrimary = Color(0xFFDBDBDB),
+    onSecondary = Color.White,
+    onTertiary = Color.White,
+    onBackground = Color(0xFFC7C7C7),
+    onSurface = Color(0xFFDADADA),
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -29,18 +36,12 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun RandomGuysTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-//    val colorScheme = when {
-//        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-//            val context = LocalContext.current
-//            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-//        }
-//        darkTheme -> DarkColorScheme
-//        else -> LightColorScheme
-//    }
-    val colorScheme = LightColorScheme
+    val colorScheme = when {
+        darkTheme -> DarkColorScheme
+        else -> LightColorScheme
+    }
 
     MaterialTheme(
         colorScheme = colorScheme,

@@ -37,6 +37,7 @@ fun CircleTextList(modifier: Modifier, items: List<RouletteItem>) {
             items.forEachIndexed { index, item ->
                 Text(
                     text = item.name,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = getTextColor(background = item.color),
                     modifier = Modifier.offset(
                         x = calculateOffset(items.size, index, parentSizePx.width, ::cos),
@@ -71,7 +72,7 @@ private fun getTextColor(background: Color): Color {
     val luminance = background.luminance()
 
     return when {
-        luminance > 0.5f -> MaterialTheme.colorScheme.onSurface
-        else -> MaterialTheme.colorScheme.onPrimary
+        luminance > 0.5f -> Color.Black
+        else -> Color.White
     }
 }

@@ -1,6 +1,7 @@
 package com.example.randomguys.presentation.screens.main
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -9,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,7 +35,11 @@ import com.example.randomguys.presentation.screens.main.composable.AutoRouletteS
 fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsState()
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
 
         if (state.rouletteItems.isNotEmpty()) {
             AnimatedRoulette(
@@ -62,6 +67,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
         ) {
             Image(
                 painter = painterResource(id = R.drawable.icon_settings),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                 contentDescription = "open settings button",
                 modifier = Modifier.size(20.dp)
             )
@@ -82,6 +88,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                         else -> R.drawable.icon_auto_mode
                     }
                 ),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onPrimary),
                 contentDescription = "auto roulette button",
                 modifier = Modifier.size(20.dp)
             )
