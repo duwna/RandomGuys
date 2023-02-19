@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -42,11 +41,8 @@ class MainViewModel @Inject constructor(
     private var autoRoulettePlayingJob: Job? = null
 
     init {
+        createNewGroupIfEmpty()
         observeSettingsChanges()
-
-        _state
-            .onEach { if (it.rouletteItems.isEmpty()) createNewGroup() }
-            .launchIn(viewModelScope)
     }
 
     fun onAngleChanged(rotationAngle: Int?) {
@@ -170,13 +166,15 @@ class MainViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    private fun createNewGroup() {
+    private fun createNewGroupIfEmpty() {
         viewModelScope.launch(exceptionHandler(messageHandler)) {
-            val itemsSize = 5
-            val group = RouletteGroup.create(resourceManager, itemsSize)
+            if (groupsRepository.observeGroups().first().isEmpty()) {
+                val itemsSize = 5
+                val group = RouletteGroup.create(resourceManager, itemsSize)
 
-            groupsRepository.saveGroup(group)
-            settingsRepository.saveSelectedGroupId(group.id)
+                groupsRepository.saveGroup(group)
+                settingsRepository.saveSelectedGroupId(group.id)
+            }
         }
     }
 }
