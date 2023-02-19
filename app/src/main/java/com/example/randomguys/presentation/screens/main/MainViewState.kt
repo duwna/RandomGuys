@@ -35,4 +35,7 @@ data class MainViewState(
 
     val isAutoRouletteFinished
         get() = autoRouletteState == AutoRouletteState.Playing && rouletteItems.size == 2
+
+    val needShowStopIcon
+        get() = autoRouletteState == AutoRouletteState.Playing || indicatorState.isAnimating
 }

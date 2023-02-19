@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,6 +45,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                     .fillMaxWidth()
                     .aspectRatio(1f)
                     .padding(30.dp)
+                    .shadow(elevation = 10.dp, shape = CircleShape)
                     .clip(CircleShape)
                     .clickable(enabled = !state.indicatorState.isAnimating) { viewModel.onRouletteClicked() }
             )
@@ -65,7 +67,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
         }
 
         FloatingActionButton(
-            onClick = viewModel::changeAutoRouletteState,
+            onClick = viewModel::onBottomButtonPressed,
             containerColor = MaterialTheme.colorScheme.primary,
             modifier = Modifier
                 .size(72.dp)
@@ -74,12 +76,12 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
         ) {
             Image(
                 painter = painterResource(
-                    id = when (state.autoRouletteState) {
-                        AutoRouletteState.Off, is AutoRouletteState.Success -> R.drawable.icon_play_arrow
-                        AutoRouletteState.Playing -> R.drawable.icon_stop
+                    id = when {
+                        state.needShowStopIcon -> R.drawable.icon_stop
+                        else -> R.drawable.icon_auto_mode
                     }
                 ),
-                contentDescription = "open settings button",
+                contentDescription = "auto roulette button",
                 modifier = Modifier.size(20.dp)
             )
         }
@@ -89,7 +91,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
         if (autoRouletteState is AutoRouletteState.Success) {
             AutoRouletteSuccessDialog(
                 rouletteItems = autoRouletteState.rouletteItems,
-                onDismiss = viewModel::changeAutoRouletteState
+                onDismiss = viewModel::onBottomButtonPressed
             )
         }
     }

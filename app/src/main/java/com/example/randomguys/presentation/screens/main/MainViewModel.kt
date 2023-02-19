@@ -14,6 +14,7 @@ import com.example.randomguys.navigation.Navigator
 import com.example.randomguys.presentation.Screen
 import com.example.randomguys.presentation.screens.main.MainViewState.AutoRouletteState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,6 +39,7 @@ class MainViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     private val autoRouletteSelectedItems = mutableListOf<RouletteItem>()
+    private var autoRoulettePlayingJob: Job? = null
 
     init {
         observeSettingsChanges()
@@ -79,31 +81,28 @@ class MainViewModel @Inject constructor(
         navigator.navigate(Screen.SETTINGS)
     }
 
-    fun changeAutoRouletteState() {
-        when (state.value.autoRouletteState) {
+    fun onBottomButtonPressed() = with(state.value) {
+        when (autoRouletteState) {
             AutoRouletteState.Off -> {
                 _state.update {
-                    it.copy(
-                        autoRouletteState = AutoRouletteState.Playing,
-                        indicatorState = it.indicatorState.copy(isAnimating = true)
-                    )
+                    if (indicatorState.isAnimating) {
+                        it.copy(indicatorState = it.indicatorState.copy(isAnimating = false))
+                    } else {
+                        it.copy(
+                            autoRouletteState = AutoRouletteState.Playing,
+                            indicatorState = it.indicatorState.copy(isAnimating = true)
+                        )
+                    }
                 }
             }
             AutoRouletteState.Playing -> {
+                autoRoulettePlayingJob?.cancel()
                 refreshGroup()
             }
             is AutoRouletteState.Success -> {
                 refreshGroup()
             }
         }
-// TODO
-//        if (state.value.rouletteItems.size == 2) {
-//            refreshGroup()
-//        } else {
-//            _state.update {
-//                it.copy(rouletteItems = it.rouletteItems.toMutableList().apply { removeAt(0) })
-//            }
-//        }
     }
 
     private fun refreshGroup() {
@@ -112,12 +111,18 @@ class MainViewModel @Inject constructor(
             val group = groupsRepository.getGroup(selectedId)
 
             autoRouletteSelectedItems.clear()
-            _state.update { it.copy(rouletteItems = group.items, autoRouletteState = AutoRouletteState.Off) }
+            _state.update {
+                it.copy(
+                    rouletteItems = group.items,
+                    autoRouletteState = AutoRouletteState.Off,
+                    indicatorState = it.indicatorState.copy(isAnimating = false)
+                )
+            }
         }
     }
 
     private fun playNextAutoRouletteIteration(newState: MainViewState, selectedItem: RouletteItem) {
-        viewModelScope.launch(exceptionHandler(messageHandler)) {
+        autoRoulettePlayingJob = viewModelScope.launch(exceptionHandler(messageHandler)) {
             autoRouletteSelectedItems.add(selectedItem)
 
             delay(1000)
@@ -137,7 +142,7 @@ class MainViewModel @Inject constructor(
             val lastItem = newState.rouletteItems.find { it !in autoRouletteSelectedItems && it != selectedItem }
                 ?: error("last item can't be null")
 
-            val autoRouletteState = MainViewState.AutoRouletteState.Success(
+            val autoRouletteState = AutoRouletteState.Success(
                 rouletteItems = autoRouletteSelectedItems + selectedItem + lastItem
             )
 

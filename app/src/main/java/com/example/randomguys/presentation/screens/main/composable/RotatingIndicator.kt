@@ -64,5 +64,7 @@ private suspend fun startAnimating(
 
 private suspend fun stopAnimating(animatedRotation: Animatable<Float, AnimationVector1D>) {
     animatedRotation.stop()
-//    animatedRotation.snapTo(0f) TODO
+
+    val currentRotation = animatedRotation.value.toInt()
+    animatedRotation.snapTo(currentRotation.mod(360).toFloat())
 }
