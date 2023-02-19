@@ -5,9 +5,8 @@ import kotlin.math.roundToInt
 object SliderFractionUtils {
 
     fun getSliderFraction(requiredRange: IntRange, actualValue: Int): Float {
-        val availableValue = if (actualValue == requiredRange.first) 0 else actualValue
         val count = requiredRange.last - requiredRange.first + 1
-        return availableValue.toFloat() / count.toFloat()
+        return actualValue.toFloat() / count.toFloat()
     }
 
     fun getValueFromFraction(requiredRange: IntRange, fraction: Float): Int {
