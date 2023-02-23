@@ -74,6 +74,9 @@ class MainViewModel @Inject constructor(
     }
 
     fun navigateToSettings() {
+        _state.update {
+            it.copy(indicatorState = it.indicatorState.copy(isAnimating = false))
+        }
         navigator.navigate(Screen.SETTINGS)
     }
 
